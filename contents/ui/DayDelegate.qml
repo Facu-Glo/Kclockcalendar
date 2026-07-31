@@ -41,27 +41,23 @@ PlasmaComponents.AbstractButton {
     hoverEnabled: isCurrent
     enabled: isCurrent
 
-    // Fondo y Borde del Resaltado
     Rectangle {
         anchors.centerIn: parent
         width: dayStyle.highlightShape === 0 ? Math.min(parent.width, parent.height) - 6 : parent.width - 2
         height: dayStyle.highlightShape === 0 ? width : parent.height - 2
         radius: dayStyle.highlightShape === 0 ? width / 2 : 4
 
-        // Mismo estilo translúcido de Plasma nativo
         color: {
             if (dayStyle.isToday) return Qt.alpha(dayStyle.highlightColor, 0.25);
-            if (dayStyle.isSelected) return Qt.alpha(dayStyle.highlightColor, 0.15);
-            if (dayStyle.hovered) return Qt.alpha(Kirigami.Theme.textColor, 0.1);
+            if (dayStyle.isSelected) return Qt.alpha(dayStyle.highlightColor, 0.25);
+            if (dayStyle.hovered) return Qt.alpha(dayStyle.highlightColor, 0.15);
             return "transparent";
         }
 
-        // Borde azul definido para el día actual o seleccionado
         border.width: (dayStyle.isToday || dayStyle.isSelected) ? 1 : 0
         border.color: dayStyle.highlightColor
     }
 
-    // Texto del número del día
     contentItem: PlasmaComponents.Label {
         text: dayStyle.model.dayNumber !== undefined ? dayStyle.model.dayNumber : ""
         horizontalAlignment: Text.AlignHCenter
@@ -73,7 +69,6 @@ PlasmaComponents.AbstractButton {
         color: Kirigami.Theme.textColor
     }
 
-    // Punto indicador de eventos
     Rectangle {
         visible: dayStyle.model.eventCount !== undefined && dayStyle.model.eventCount > 0
         width: 4

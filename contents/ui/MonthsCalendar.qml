@@ -74,7 +74,7 @@ Item {
 
                         color: {
                             if (parent.isCurrentMonth) return Qt.alpha(root.highlightColor, 0.25)
-                            if (parent.hovered) return Qt.alpha(Kirigami.Theme.textColor, 0.1)
+                            if (parent.hovered) return Qt.alpha(root.highlightColor, 0.15)
                             return "transparent"
                         }
 

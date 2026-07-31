@@ -230,8 +230,7 @@ PlasmoidItem {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: 4
-                        color: parent.containsMouse ? Qt.alpha(Kirigami.Theme.textColor, 0.1) : "transparent"
+                        color: parent.containsMouse ? Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.15) : "transparent"
                     }
 
                     PlasmaComponents.Label {
