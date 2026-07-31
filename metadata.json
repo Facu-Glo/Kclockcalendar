@@ -1,0 +1,19 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "Facu"
+            }
+        ],
+        "Category": "Date and Time",
+        "Description": "Reloj y calendario estilo Windows 11",
+        "Icon": "preferences-system-time",
+        "Id": "org.kde.win11clock",
+        "License": "GPL-2.0-or-later",
+        "Name": "Reloj Windows 11",
+        "Version": "1.0"
+    },
+    "KPackageStructure": "Plasma/Applet",
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-MainScript": "ui/main.qml"
+}

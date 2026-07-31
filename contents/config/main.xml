@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/cfg.xsd">
+  <kcfgfile name=""/>
+  <group name="General">
+    <entry name="timeFormat" type="String">
+      <default>hh:mm:ss</default>
+    </entry>
+    <entry name="dateFormat" type="String">
+      <default>dd.MM.yy</default>
+    </entry>
+    <entry name="showDate" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="layoutPosition" type="Int">
+      <default>0</default>
+    </entry>
+    <entry name="showSeconds" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="showPopupSeconds" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="use24hFormat" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="firstDayOfWeek" type="Int">
+      <default>0</default>
+    </entry>
+  </group>
+  <group name="Appearance">
+    <entry name="font" type="Font">
+      <default></default>
+    </entry>
+    <entry name="timeFontSize" type="Int">
+      <default>12</default>
+    </entry>
+    <entry name="dateFontSize" type="Int">
+      <default>10</default>
+    </entry>
+    <entry name="bigClockFontSize" type="Int">
+      <default>42</default>
+    </entry>
+    <entry name="textColor" type="String">
+      <default></default>
+    </entry>
+    <entry name="textAlignment" type="Int">
+      <default>1</default>
+    </entry>
+    <entry name="dayHighlightShape" type="Int">
+      <default>0</default>
+    </entry>
+    <entry name="highlightColor" type="String">
+      <default></default>
+    </entry>
+  </group>
+</kcfg>
