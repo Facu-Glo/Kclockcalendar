@@ -23,6 +23,7 @@ QtObject {
 
     readonly property string dateFormat: Plasmoid.configuration.dateFormat || "dd.MM.yy"
     readonly property int layoutPosition: Plasmoid.configuration.layoutPosition
+    readonly property bool dateFirst: Plasmoid.configuration.dateFirst
     readonly property bool showDate: Plasmoid.configuration.showDate
     readonly property bool showSeconds: Plasmoid.configuration.showSeconds
     readonly property bool showPopupSeconds: Plasmoid.configuration.showPopupSeconds

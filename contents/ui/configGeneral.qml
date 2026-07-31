@@ -15,6 +15,7 @@ KCM.SimpleKCM {
     property alias cfg_showPopupSeconds: popupSecondsCheck.checked
     property alias cfg_use24hFormat: use24hCheck.checked
     property alias cfg_firstDayOfWeek: firstDayBox.currentIndex
+    property alias cfg_dateFirst: dateFirstCheck.checked
 
     Kirigami.FormLayout {
         id: formLayout
@@ -44,6 +45,12 @@ KCM.SimpleKCM {
             enabled: showDateCheck.checked
             Kirigami.FormData.label: "Position in panel:"
             model: ["Time above, Date below", "Date above, Time below", "Time and date together"]
+        }
+
+        PlasmaComponents.CheckBox {
+            id: dateFirstCheck
+            enabled: layoutBox.currentIndex === 2
+            Kirigami.FormData.label: "Date first (horizontal):"
         }
 
         PlasmaComponents.CheckBox {
