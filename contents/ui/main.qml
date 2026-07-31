@@ -12,8 +12,9 @@ PlasmoidItem {
     preferredRepresentation: compactRepresentation
 
     property date now: new Date()
-    property date currentDate: now
-    property date today: now
+    property date day: new Date()
+    property date currentDate: day
+    property date today: day
 
     property string resolvedTimeFormat: {
         var fmt = Plasmoid.configuration.use24hFormat ? "HH" : "hh"
@@ -51,11 +52,58 @@ PlasmoidItem {
         }
     }
 
+    property int clockInterval: {
+        if (Plasmoid.configuration.showSeconds) return 1000
+        if (Plasmoid.configuration.showPopupSeconds && root.expanded) return 1000
+        return 60000
+    }
+
+    function updateNow() {
+        var now = new Date()
+        root.now = now
+        if (now.getFullYear() !== root.day.getFullYear()
+                || now.getMonth() !== root.day.getMonth()
+                || now.getDate() !== root.day.getDate()) {
+            root.day = now
+        }
+    }
+
+    function armClockTimer() {
+        var now = new Date()
+        var interval = root.clockInterval
+        if (interval === 1000) {
+            clockTimer.interval = 1000 - now.getMilliseconds() + 5
+        } else {
+            clockTimer.interval = (60 - now.getSeconds()) * 1000 - now.getMilliseconds() + 5
+        }
+        clockTimer.start()
+    }
+
     Timer {
-        interval: 500
-        running: true
-        repeat: true
-        onTriggered: root.now = new Date()
+        id: clockTimer
+        repeat: false
+        onTriggered: {
+            root.updateNow()
+            root.armClockTimer()
+        }
+    }
+
+    Connections {
+        target: root
+        function onExpandedChanged() {
+            root.armClockTimer()
+        }
+    }
+
+    Connections {
+        target: Plasmoid.configuration
+        function onShowSecondsChanged() { root.armClockTimer() }
+        function onShowPopupSecondsChanged() { root.armClockTimer() }
+    }
+
+    Component.onCompleted: {
+        root.updateNow()
+        root.armClockTimer()
     }
 
     compactRepresentation: MouseArea {
@@ -100,7 +148,7 @@ PlasmoidItem {
                     color: root.panelTextColor
                     horizontalAlignment: root.panelHAlignment
                     visible: Plasmoid.configuration.layoutPosition === 1 && Plasmoid.configuration.showDate
-                    text: Qt.locale().toString(root.now, Plasmoid.configuration.dateFormat || "dd.MM.yy")
+                    text: Qt.locale().toString(root.day, Plasmoid.configuration.dateFormat || "dd.MM.yy")
                 }
 
                 PlasmaComponents.Label {
@@ -127,7 +175,7 @@ PlasmoidItem {
                     color: root.panelTextColor
                     horizontalAlignment: root.panelHAlignment
                     visible: Plasmoid.configuration.layoutPosition === 0 && Plasmoid.configuration.showDate
-                    text: Qt.locale().toString(root.now, Plasmoid.configuration.dateFormat || "dd.MM.yy")
+                    text: Qt.locale().toString(root.day, Plasmoid.configuration.dateFormat || "dd.MM.yy")
                 }
             }
         }
@@ -158,7 +206,7 @@ PlasmoidItem {
                     opacity: 0.85
                     color: root.panelTextColor
                     horizontalAlignment: root.panelHAlignment
-                    text: Qt.locale().toString(root.now, Plasmoid.configuration.dateFormat || "dd.MM.yy")
+                    text: Qt.locale().toString(root.day, Plasmoid.configuration.dateFormat || "dd.MM.yy")
                 }
             }
         }
@@ -210,7 +258,7 @@ PlasmoidItem {
                     font.family: root.resolvedFont.family
                     font.italic: root.resolvedFont.italic
                     color: Plasmoid.configuration.textColor || Kirigami.Theme.textColor
-                    text: Qt.locale().toString(root.now, "dddd d MMMM yyyy")
+                    text: Qt.locale().toString(root.day, "dddd d MMMM yyyy")
                 }
             }
 
