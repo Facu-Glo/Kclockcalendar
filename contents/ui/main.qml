@@ -144,7 +144,6 @@ PlasmoidItem {
                     font.weight: root.resolvedFont.weight
                     font.family: root.resolvedFont.family
                     font.italic: root.resolvedFont.italic
-                    opacity: 0.85
                     color: root.panelTextColor
                     horizontalAlignment: root.panelHAlignment
                     visible: Plasmoid.configuration.layoutPosition === 1 && Plasmoid.configuration.showDate
@@ -171,7 +170,6 @@ PlasmoidItem {
                     font.weight: root.resolvedFont.weight
                     font.family: root.resolvedFont.family
                     font.italic: root.resolvedFont.italic
-                    opacity: 0.85
                     color: root.panelTextColor
                     horizontalAlignment: root.panelHAlignment
                     visible: Plasmoid.configuration.layoutPosition === 0 && Plasmoid.configuration.showDate
@@ -203,7 +201,7 @@ PlasmoidItem {
                     font.weight: root.resolvedFont.weight
                     font.family: root.resolvedFont.family
                     font.italic: root.resolvedFont.italic
-                    opacity: 0.85
+                    // opacity: 0.85
                     color: root.panelTextColor
                     horizontalAlignment: root.panelHAlignment
                     text: Qt.locale().toString(root.day, Plasmoid.configuration.dateFormat || "dd.MM.yy")
