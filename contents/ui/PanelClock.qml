@@ -18,7 +18,7 @@ MouseArea {
     Loader {
         id: layoutLoader
         anchors.centerIn: parent
-        sourceComponent: root.config.layoutPosition === 2 ? rowLayoutComponent : columnLayoutComponent
+        sourceComponent: root.config.layoutPosition === 1 ? rowLayoutComponent : columnLayoutComponent
     }
 
     Component {
@@ -32,7 +32,7 @@ MouseArea {
                 fontSize: root.config.timeFontSize
                 config: root.config
                 textSource: Qt.locale().toString(root.now, root.config.timeFormat)
-                visible: root.config.layoutPosition === 0 || !root.config.showDate
+                visible: !root.config.dateAbove || !root.config.showDate
             }
 
             ClockPanelLabel {
@@ -40,7 +40,7 @@ MouseArea {
                 fontSize: root.config.dateFontSize
                 config: root.config
                 textSource: Qt.locale().toString(root.day, root.config.dateFormat)
-                visible: root.config.layoutPosition === 1 && root.config.showDate
+                visible: root.config.dateAbove && root.config.showDate
             }
 
             ClockPanelLabel {
@@ -48,7 +48,7 @@ MouseArea {
                 fontSize: root.config.timeFontSize
                 config: root.config
                 textSource: Qt.locale().toString(root.now, root.config.timeFormat)
-                visible: root.config.layoutPosition === 1 && root.config.showDate
+                visible: root.config.dateAbove && root.config.showDate
             }
 
             ClockPanelLabel {
@@ -56,7 +56,7 @@ MouseArea {
                 fontSize: root.config.dateFontSize
                 config: root.config
                 textSource: Qt.locale().toString(root.day, root.config.dateFormat)
-                visible: root.config.layoutPosition === 0 && root.config.showDate
+                visible: !root.config.dateAbove && root.config.showDate
             }
         }
     }

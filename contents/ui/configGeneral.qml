@@ -11,11 +11,12 @@ KCM.SimpleKCM {
     property alias cfg_dateFormat: dateFormatInput.text
     property alias cfg_showDate: showDateCheck.checked
     property alias cfg_layoutPosition: layoutBox.currentIndex
+    property alias cfg_dateAbove: dateAboveCheck.checked
+    property alias cfg_dateFirst: dateFirstCheck.checked
     property alias cfg_showSeconds: showSecondsCheck.checked
     property alias cfg_showPopupSeconds: popupSecondsCheck.checked
     property alias cfg_use24hFormat: use24hCheck.checked
     property alias cfg_firstDayOfWeek: firstDayBox.currentIndex
-    property alias cfg_dateFirst: dateFirstCheck.checked
 
     Kirigami.FormLayout {
         id: formLayout
@@ -44,13 +45,21 @@ KCM.SimpleKCM {
             id: layoutBox
             enabled: showDateCheck.checked
             Kirigami.FormData.label: "Position in panel:"
-            model: ["Time above, Date below", "Date above, Time below", "Time and date together"]
+            model: ["Vertical", "Horizontal"]
+        }
+
+        PlasmaComponents.CheckBox {
+            id: dateAboveCheck
+            visible: layoutBox.currentIndex === 0
+            enabled: showDateCheck.checked
+            Kirigami.FormData.label: "Date above:"
         }
 
         PlasmaComponents.CheckBox {
             id: dateFirstCheck
-            enabled: layoutBox.currentIndex === 2
-            Kirigami.FormData.label: "Date first (horizontal):"
+            visible: layoutBox.currentIndex === 1
+            enabled: showDateCheck.checked
+            Kirigami.FormData.label: "Date first:"
         }
 
         PlasmaComponents.CheckBox {
