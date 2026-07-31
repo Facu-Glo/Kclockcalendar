@@ -6,12 +6,10 @@ import org.kde.plasma.workspace.calendar as PlasmaCalendar
 PlasmaComponents.AbstractButton {
     id: dayStyle
 
-    required property int index
     required property var model
     required property bool isCurrent
     required property int yearNumber
     required property int dateMatchingPrecision
-    required property QtObject dayModel
 
     property date todayDate: new Date()
     property date selectedDate: new Date()

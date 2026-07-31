@@ -9,16 +9,13 @@ Item {
 
     property int rows
     property int columns
-    property bool showWeekNumbers: false
     property PlasmaCalendar.Calendar backend
     required property int dateMatchingPrecision
-    required property int borderWidth
     property date todayDate: new Date()
     property date selectedDate: new Date()
     property int highlightShape: 0
     property color highlightColor: Kirigami.Theme.highlightColor
 
-    readonly property alias repeater: gridRepeater
     property alias dayOfWeekHeaderModel: dayOfWeekHeaderRepeater.model
     property alias gridModel: gridRepeater.model
 
@@ -59,7 +56,6 @@ Item {
             DayDelegate {
                 width: daysCalendar.cellWidth
                 height: daysCalendar.cellHeight
-                dayModel: gridRepeater.model
                 dateMatchingPrecision: daysCalendar.dateMatchingPrecision
                 todayDate: daysCalendar.todayDate
                 selectedDate: daysCalendar.selectedDate
