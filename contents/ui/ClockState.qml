@@ -10,51 +10,65 @@ Item {
     property date now: new Date()
     property date day: new Date()
 
-    readonly property int clockInterval: {
-        if (root.showSeconds) return 1000
-        if (root.showPopupSeconds && root.expanded) return 1000
-        return 60000
-    }
-
     function updateNow() {
-        var now = new Date()
-        root.now = now
-        if (now.getFullYear() !== root.day.getFullYear()
-                || now.getMonth() !== root.day.getMonth()
-                || now.getDate() !== root.day.getDate()) {
-            root.day = now
+        var n = new Date()
+        root.now = n
+        if (n.getFullYear() !== root.day.getFullYear()
+                || n.getMonth() !== root.day.getMonth()
+                || n.getDate() !== root.day.getDate()) {
+            root.day = n
         }
     }
 
-    function armClockTimer() {
-        var now = new Date()
-        var interval = root.clockInterval
-        if (interval === 1000) {
-            clockTimer.interval = 1000 - now.getMilliseconds() + 5
+    function alignAndStartClock() {
+        syncTimer.stop()
+        clockTimer.stop()
+
+        root.updateNow()
+
+        var needsSeconds = root.showSeconds || (root.showPopupSeconds && root.expanded)
+        var n = new Date()
+
+        if (needsSeconds) {
+            var msToNextSecond = 1000 - n.getMilliseconds()
+            syncTimer.interval = Math.max(1, msToNextSecond)
+            syncTimer.targetInterval = 1000
+            syncTimer.start()
         } else {
-            clockTimer.interval = (60 - now.getSeconds()) * 1000 - now.getMilliseconds() + 5
+            var msToNextMinute = (60 - n.getSeconds()) * 1000 - n.getMilliseconds()
+            syncTimer.interval = Math.max(1, msToNextMinute)
+            syncTimer.targetInterval = 60000
+            syncTimer.start()
         }
-        clockTimer.start()
+    }
+
+    Timer {
+        id: syncTimer
+        property int targetInterval: 1000
+        repeat: false
+        onTriggered: {
+            root.updateNow()
+            clockTimer.interval = targetInterval
+            clockTimer.start()
+        }
     }
 
     Timer {
         id: clockTimer
-        repeat: false
+        repeat: true
         onTriggered: {
             root.updateNow()
-            root.armClockTimer()
         }
     }
 
     Connections {
         target: root
-        function onShowSecondsChanged() { root.armClockTimer() }
-        function onShowPopupSecondsChanged() { root.armClockTimer() }
-        function onExpandedChanged() { root.armClockTimer() }
+        function onShowSecondsChanged() { root.alignAndStartClock() }
+        function onShowPopupSecondsChanged() { root.alignAndStartClock() }
+        function onExpandedChanged() { root.alignAndStartClock() }
     }
 
     Component.onCompleted: {
-        root.updateNow()
-        root.armClockTimer()
+        root.alignAndStartClock()
     }
 }
