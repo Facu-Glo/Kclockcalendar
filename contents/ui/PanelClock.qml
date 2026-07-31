@@ -12,7 +12,6 @@ MouseArea {
 
     Layout.preferredWidth: layoutLoader.implicitWidth + 8
     Layout.minimumWidth: 40
-    cursorShape: Qt.PointingHandCursor
     onClicked: root.toggleRequested()
 
     Loader {
