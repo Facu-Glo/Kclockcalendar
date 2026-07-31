@@ -216,13 +216,15 @@ PlasmoidItem {
                 opacity: 0.12
             }
 
-            RowLayout {
+            Item {
                 Layout.fillWidth: true
+                implicitHeight: monthTitleBtn.implicitHeight
                 Layout.topMargin: 4
                 Layout.bottomMargin: 4
 
                 PlasmaComponents.AbstractButton {
                     id: monthTitleBtn
+                    anchors.centerIn: parent
                     implicitWidth: monthLabel.implicitWidth + 12
                     implicitHeight: monthLabel.implicitHeight + 8
                     hoverEnabled: true
@@ -255,20 +257,22 @@ PlasmoidItem {
                     }
                 }
 
-                Item {
-                    Layout.fillWidth: true
-                }
+                RowLayout {
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 4
 
-                PlasmaComponents.ToolButton {
-                    icon.name: "go-up-symbolic"
-                    display: PlasmaComponents.AbstractButton.IconOnly
-                    onClicked: calendarBackend.previousMonth()
-                }
+                    PlasmaComponents.ToolButton {
+                        icon.name: "go-up-symbolic"
+                        display: PlasmaComponents.AbstractButton.IconOnly
+                        onClicked: calendarBackend.previousMonth()
+                    }
 
-                PlasmaComponents.ToolButton {
-                    icon.name: "go-down-symbolic"
-                    display: PlasmaComponents.AbstractButton.IconOnly
-                    onClicked: calendarBackend.nextMonth()
+                    PlasmaComponents.ToolButton {
+                        icon.name: "go-down-symbolic"
+                        display: PlasmaComponents.AbstractButton.IconOnly
+                        onClicked: calendarBackend.nextMonth()
+                    }
                 }
             }
 
