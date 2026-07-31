@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import org.kde.plasma.plasmoid
+import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.extras as PlasmaExtras
 import org.kde.plasma.workspace.calendar as PlasmaCalendar
 
@@ -61,6 +62,7 @@ PlasmoidItem {
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: 20
+            anchors.topMargin: Plasmoid.location === PlasmaCore.Types.TopEdge ? 4 : 20
             spacing: 14
 
             PopupHeader {
