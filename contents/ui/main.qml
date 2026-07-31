@@ -1,9 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import org.kde.plasma.plasmoid
-import org.kde.plasma.components as PlasmaComponents
 import org.kde.plasma.extras as PlasmaExtras
-import org.kde.kirigami as Kirigami
 import org.kde.plasma.workspace.calendar as PlasmaCalendar
 
 PlasmoidItem {
@@ -11,203 +9,24 @@ PlasmoidItem {
 
     preferredRepresentation: compactRepresentation
 
-    property date now: new Date()
-    property date day: new Date()
-    property date currentDate: day
-    property date today: day
-
-    property string resolvedTimeFormat: {
-        var fmt = Plasmoid.configuration.use24hFormat ? "HH" : "hh"
-        fmt += ":mm"
-        if (Plasmoid.configuration.showSeconds) fmt += ":ss"
-        if (!Plasmoid.configuration.use24hFormat) fmt += " AP"
-        return fmt
+    property QtObject config: ConfigResolver {}
+    property Item clock: ClockState {
+        showSeconds: root.config.showSeconds
+        showPopupSeconds: root.config.showPopupSeconds
+        expanded: root.expanded
     }
 
-    property string panelTextColor: Plasmoid.configuration.textColor || Kirigami.Theme.textColor
-
-    property string popupTimeFormat: {
-        var fmt = "hh:mm"
-        if (Plasmoid.configuration.showPopupSeconds) fmt += ":ss"
-        return fmt
-    }
-
-    property font resolvedFont: {
-        var f = Plasmoid.configuration.font
-        return f.family ? f : Kirigami.Theme.defaultFont
-    }
-
-    property font resolvedPopupFont: {
-        var f = Plasmoid.configuration.popupFont
-        return f.family ? f : Kirigami.Theme.defaultFont
-    }
-
+    property date now: clock.now
+    property date day: clock.day
+    property date currentDate: clock.day
+    property date today: clock.day
     property int currentView: 0 // 0 = days, 1 = months
 
-    property int panelHAlignment: {
-        switch (Plasmoid.configuration.textAlignment) {
-            case 0: return Text.AlignLeft
-            case 2: return Text.AlignRight
-            default: return Text.AlignHCenter
-        }
-    }
-
-    property int clockInterval: {
-        if (Plasmoid.configuration.showSeconds) return 1000
-        if (Plasmoid.configuration.showPopupSeconds && root.expanded) return 1000
-        return 60000
-    }
-
-    function updateNow() {
-        var now = new Date()
-        root.now = now
-        if (now.getFullYear() !== root.day.getFullYear()
-                || now.getMonth() !== root.day.getMonth()
-                || now.getDate() !== root.day.getDate()) {
-            root.day = now
-        }
-    }
-
-    function armClockTimer() {
-        var now = new Date()
-        var interval = root.clockInterval
-        if (interval === 1000) {
-            clockTimer.interval = 1000 - now.getMilliseconds() + 5
-        } else {
-            clockTimer.interval = (60 - now.getSeconds()) * 1000 - now.getMilliseconds() + 5
-        }
-        clockTimer.start()
-    }
-
-    Timer {
-        id: clockTimer
-        repeat: false
-        onTriggered: {
-            root.updateNow()
-            root.armClockTimer()
-        }
-    }
-
-    Connections {
-        target: root
-        function onExpandedChanged() {
-            root.armClockTimer()
-        }
-    }
-
-    Connections {
-        target: Plasmoid.configuration
-        function onShowSecondsChanged() { root.armClockTimer() }
-        function onShowPopupSecondsChanged() { root.armClockTimer() }
-    }
-
-    Component.onCompleted: {
-        root.updateNow()
-        root.armClockTimer()
-    }
-
-    compactRepresentation: MouseArea {
-        id: compactArea
-        Layout.preferredWidth: layoutLoader.implicitWidth + 8
-        Layout.minimumWidth: 40
-        cursorShape: Qt.PointingHandCursor
-        onClicked: root.expanded = !root.expanded
-
-        Loader {
-            id: layoutLoader
-            anchors.centerIn: parent
-            sourceComponent: Plasmoid.configuration.layoutPosition === 2 ? rowLayoutComponent : columnLayoutComponent
-        }
-
-        Component {
-            id: columnLayoutComponent
-            ColumnLayout {
-                spacing: 0
-
-                PlasmaComponents.Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.fillWidth: true
-                    font.pixelSize: Plasmoid.configuration.timeFontSize
-                    font.weight: root.resolvedFont.weight
-                    font.family: root.resolvedFont.family
-                    font.italic: root.resolvedFont.italic
-                    color: root.panelTextColor
-                    horizontalAlignment: root.panelHAlignment
-                    visible: Plasmoid.configuration.layoutPosition === 0 || !Plasmoid.configuration.showDate
-                    text: Qt.locale().toString(root.now, root.resolvedTimeFormat)
-                }
-
-                PlasmaComponents.Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.fillWidth: true
-                    font.pixelSize: Plasmoid.configuration.dateFontSize
-                    font.weight: root.resolvedFont.weight
-                    font.family: root.resolvedFont.family
-                    font.italic: root.resolvedFont.italic
-                    color: root.panelTextColor
-                    horizontalAlignment: root.panelHAlignment
-                    visible: Plasmoid.configuration.layoutPosition === 1 && Plasmoid.configuration.showDate
-                    text: Qt.locale().toString(root.day, Plasmoid.configuration.dateFormat || "dd.MM.yy")
-                }
-
-                PlasmaComponents.Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.fillWidth: true
-                    font.pixelSize: Plasmoid.configuration.timeFontSize
-                    font.weight: root.resolvedFont.weight
-                    font.family: root.resolvedFont.family
-                    font.italic: root.resolvedFont.italic
-                    color: root.panelTextColor
-                    horizontalAlignment: root.panelHAlignment
-                    visible: Plasmoid.configuration.layoutPosition === 1 && Plasmoid.configuration.showDate
-                    text: Qt.locale().toString(root.now, root.resolvedTimeFormat)
-                }
-
-                PlasmaComponents.Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.fillWidth: true
-                    font.pixelSize: Plasmoid.configuration.dateFontSize
-                    font.weight: root.resolvedFont.weight
-                    font.family: root.resolvedFont.family
-                    font.italic: root.resolvedFont.italic
-                    color: root.panelTextColor
-                    horizontalAlignment: root.panelHAlignment
-                    visible: Plasmoid.configuration.layoutPosition === 0 && Plasmoid.configuration.showDate
-                    text: Qt.locale().toString(root.day, Plasmoid.configuration.dateFormat || "dd.MM.yy")
-                }
-            }
-        }
-
-        Component {
-            id: rowLayoutComponent
-            RowLayout {
-                spacing: 4
-
-                PlasmaComponents.Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    font.pixelSize: Plasmoid.configuration.timeFontSize
-                    font.weight: root.resolvedFont.weight
-                    font.family: root.resolvedFont.family
-                    font.italic: root.resolvedFont.italic
-                    color: root.panelTextColor
-                    horizontalAlignment: root.panelHAlignment
-                    text: Qt.locale().toString(root.now, root.resolvedTimeFormat)
-                }
-
-                PlasmaComponents.Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    visible: Plasmoid.configuration.showDate
-                    font.pixelSize: Plasmoid.configuration.dateFontSize
-                    font.weight: root.resolvedFont.weight
-                    font.family: root.resolvedFont.family
-                    font.italic: root.resolvedFont.italic
-                    // opacity: 0.85
-                    color: root.panelTextColor
-                    horizontalAlignment: root.panelHAlignment
-                    text: Qt.locale().toString(root.day, Plasmoid.configuration.dateFormat || "dd.MM.yy")
-                }
-            }
-        }
+    compactRepresentation: PanelClock {
+        now: root.now
+        day: root.day
+        config: root.config
+        onToggleRequested: root.expanded = !root.expanded
     }
 
     fullRepresentation: PlasmaExtras.Representation {
@@ -218,7 +37,7 @@ PlasmoidItem {
             id: calendarBackend
             days: 7
             weeks: 6
-            firstDayOfWeek: Plasmoid.configuration.firstDayOfWeek || Qt.locale().firstDayOfWeek
+            firstDayOfWeek: root.config.firstDayOfWeek || Qt.locale().firstDayOfWeek
             today: root.today
         }
 
@@ -238,93 +57,15 @@ PlasmoidItem {
             anchors.margins: 20
             spacing: 14
 
-            ColumnLayout {
-                spacing: 4
-
-                PlasmaComponents.Label {
-                    font.pixelSize: Plasmoid.configuration.bigClockFontSize
-                    font.weight: root.resolvedPopupFont.weight
-                    font.family: root.resolvedPopupFont.family
-                    font.italic: root.resolvedPopupFont.italic
-                    color: Plasmoid.configuration.textColor || Kirigami.Theme.textColor
-                    text: Qt.locale().toString(root.now, root.popupTimeFormat)
-                }
-
-                PlasmaComponents.Label {
-                    font.pixelSize: 13
-                    opacity: 0.85
-                    font.family: root.resolvedFont.family
-                    font.italic: root.resolvedFont.italic
-                    color: Plasmoid.configuration.textColor || Kirigami.Theme.textColor
-                    text: Qt.locale().toString(root.day, "dddd d MMMM yyyy")
-                }
-            }
-
-            Rectangle {
+            PopupHeader {
                 Layout.fillWidth: true
-                height: 1
-                color: Kirigami.Theme.textColor
-                opacity: 0.12
-            }
-
-            Item {
-                Layout.fillWidth: true
-                implicitHeight: monthTitleBtn.implicitHeight
-                Layout.topMargin: 4
-                Layout.bottomMargin: 4
-
-                PlasmaComponents.AbstractButton {
-                    id: monthTitleBtn
-                    anchors.centerIn: parent
-                    implicitWidth: monthLabel.implicitWidth + 12
-                    implicitHeight: monthLabel.implicitHeight + 8
-                    hoverEnabled: true
-                    background: null
-
-                    onClicked: root.currentView = root.currentView === 0 ? 1 : 0
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: 4
-                        color: {
-                            if (monthTitleBtn.pressed) return Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.25)
-                            if (monthTitleBtn.hovered) return Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.15)
-                            return "transparent"
-                        }
-                        border.width: monthTitleBtn.hovered ? 1 : 0
-                        border.color: Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.4)
-                    }
-
-                    contentItem: PlasmaComponents.Label {
-                        id: monthLabel
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        font.pixelSize: 14
-                        font.weight: Font.Medium
-                        font.family: root.resolvedFont.family
-                        font.italic: root.resolvedFont.italic
-                        color: Plasmoid.configuration.textColor || Kirigami.Theme.textColor
-                        text: calendarBackend.monthName + " " + calendarBackend.year
-                    }
-                }
-
-                RowLayout {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: 4
-
-                    PlasmaComponents.ToolButton {
-                        icon.name: "go-up-symbolic"
-                        display: PlasmaComponents.AbstractButton.IconOnly
-                        onClicked: calendarBackend.previousMonth()
-                    }
-
-                    PlasmaComponents.ToolButton {
-                        icon.name: "go-down-symbolic"
-                        display: PlasmaComponents.AbstractButton.IconOnly
-                        onClicked: calendarBackend.nextMonth()
-                    }
-                }
+                now: root.now
+                day: root.day
+                monthTitle: calendarBackend.monthName + " " + calendarBackend.year
+                config: root.config
+                onMonthTitleClicked: root.currentView = root.currentView === 0 ? 1 : 0
+                onPreviousMonth: calendarBackend.previousMonth()
+                onNextMonth: calendarBackend.nextMonth()
             }
 
             Item {
@@ -332,19 +73,17 @@ PlasmoidItem {
                 Layout.fillHeight: true
 
                 DaysCalendar {
-                    id: customCalendar
                     anchors.fill: parent
                     visible: root.currentView === 0
 
                     columns: calendarBackend.days
                     rows: calendarBackend.weeks
                     dateMatchingPrecision: PlasmaCalendar.Calendar.MatchYearMonthAndDay
-                    borderWidth: 0
                     dayOfWeekHeaderModel: calendarBackend.days
                     todayDate: root.today
                     selectedDate: root.currentDate
-                    highlightShape: Plasmoid.configuration.dayHighlightShape
-                    highlightColor: Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor
+                    highlightShape: root.config.dayHighlightShape
+                    highlightColor: root.config.highlightColor
 
                     backend: calendarBackend
                     gridModel: calendarBackend.daysModel
@@ -358,7 +97,7 @@ PlasmoidItem {
                     anchors.fill: parent
                     visible: root.currentView === 1
                     backend: calendarBackend
-                    highlightColor: Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor
+                    highlightColor: root.config.highlightColor
                     onMonthSelected: (month) => {
                         calendarBackend.goToMonth(month)
                         root.currentView = 0
