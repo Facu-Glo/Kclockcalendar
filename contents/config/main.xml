@@ -40,9 +40,6 @@
     <entry name="font" type="Font">
       <default></default>
     </entry>
-    <entry name="popupFont" type="Font">
-      <default></default>
-    </entry>
     <entry name="timeFontSize" type="Int">
       <default>12</default>
     </entry>

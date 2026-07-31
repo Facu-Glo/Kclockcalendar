@@ -39,11 +39,6 @@ QtObject {
         return f.family ? f : Kirigami.Theme.defaultFont
     }
 
-    readonly property font resolvedPopupFont: {
-        var f = Plasmoid.configuration.popupFont
-        return f.family ? f : Kirigami.Theme.defaultFont
-    }
-
     readonly property color textColor: Plasmoid.configuration.textColor || Kirigami.Theme.textColor
     readonly property color highlightColor: Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor
 

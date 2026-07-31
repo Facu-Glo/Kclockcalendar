@@ -10,7 +10,6 @@ KCM.SimpleKCM {
     id: configPage
 
     property font cfg_font
-    property font cfg_popupFont
     property alias cfg_timeFontSize: timeFontSizeInput.value
     property alias cfg_dateFontSize: dateFontSizeInput.value
     property alias cfg_bigClockFontSize: bigClockFontSizeInput.value
@@ -29,11 +28,6 @@ KCM.SimpleKCM {
             onAccepted: cfg_font = fontDialog.selectedFont
         }
 
-        QtDialogs.FontDialog {
-            id: popupFontDialog
-            onAccepted: cfg_popupFont = popupFontDialog.selectedFont
-        }
-
         Row {
             Kirigami.FormData.label: "Font:"
             spacing: Kirigami.Units.smallSpacing
@@ -48,24 +42,6 @@ KCM.SimpleKCM {
                 onClicked: {
                     if (cfg_font && cfg_font.family) fontDialog.selectedFont = cfg_font
                     fontDialog.open()
-                }
-            }
-        }
-
-        Row {
-            Kirigami.FormData.label: "Popup clock font:"
-            spacing: Kirigami.Units.smallSpacing
-
-            PlasmaComponents.Label {
-                anchors.verticalCenter: parent.verticalCenter
-                text: cfg_popupFont.family || "(default)"
-            }
-
-            QQC2.Button {
-                text: "Choose..."
-                onClicked: {
-                    if (cfg_popupFont && cfg_popupFont.family) popupFontDialog.selectedFont = cfg_popupFont
-                    popupFontDialog.open()
                 }
             }
         }
