@@ -8,9 +8,9 @@
         "Category": "Date and Time",
         "Description": "Reloj y calendario personalizable",
         "Icon": "preferences-system-time",
-        "Id": "org.kde.relojcalendario",
+        "Id": "org.kde.kclockcalendar",
         "License": "GPL-2.0-or-later",
-        "Name": "Reloj y Calendario Personalizable",
+        "Name": "KClockCalendar",
         "Version": "1.0"
     },
     "KPackageStructure": "Plasma/Applet",
