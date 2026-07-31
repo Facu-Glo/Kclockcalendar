@@ -36,6 +36,8 @@ PlasmoidItem {
         return f.family ? f : Kirigami.Theme.defaultFont
     }
 
+    property int currentView: 0 // 0 = days, 1 = months
+
     property int panelHAlignment: {
         switch (Plasmoid.configuration.textAlignment) {
             case 0: return Text.AlignLeft
@@ -175,6 +177,7 @@ PlasmoidItem {
                 if (root.expanded) {
                     calendarBackend.resetToToday()
                     root.currentDate = root.today
+                    root.currentView = 0
                 }
             }
         }
@@ -218,14 +221,29 @@ PlasmoidItem {
                 Layout.topMargin: 4
                 Layout.bottomMargin: 4
 
-                PlasmaComponents.Label {
-                    font.pixelSize: 14
-                    font.weight: Font.Medium
-                    font.family: root.resolvedFont.family
-                    font.italic: root.resolvedFont.italic
-                    color: Plasmoid.configuration.textColor || Kirigami.Theme.textColor
-                    text: calendarBackend.monthName + " " + calendarBackend.year
+                MouseArea {
                     Layout.fillWidth: true
+                    implicitHeight: monthLabel.implicitHeight
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+                    onClicked: root.currentView = root.currentView === 0 ? 1 : 0
+
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: 4
+                        color: parent.containsMouse ? Qt.alpha(Kirigami.Theme.textColor, 0.1) : "transparent"
+                    }
+
+                    PlasmaComponents.Label {
+                        id: monthLabel
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pixelSize: 14
+                        font.weight: Font.Medium
+                        font.family: root.resolvedFont.family
+                        font.italic: root.resolvedFont.italic
+                        color: Plasmoid.configuration.textColor || Kirigami.Theme.textColor
+                        text: calendarBackend.monthName + " " + calendarBackend.year
+                    }
                 }
 
                 PlasmaComponents.ToolButton {
@@ -241,26 +259,42 @@ PlasmoidItem {
                 }
             }
 
-            DaysCalendar {
-                id: customCalendar
+            Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                columns: calendarBackend.days
-                rows: calendarBackend.weeks
-                dateMatchingPrecision: PlasmaCalendar.Calendar.MatchYearMonthAndDay
-                borderWidth: 0
-                dayOfWeekHeaderModel: calendarBackend.days
-                todayDate: root.today
-                selectedDate: root.currentDate
-                highlightShape: Plasmoid.configuration.dayHighlightShape
-                highlightColor: Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor
+                DaysCalendar {
+                    id: customCalendar
+                    anchors.fill: parent
+                    visible: root.currentView === 0
 
-                backend: calendarBackend
-                gridModel: calendarBackend.daysModel
+                    columns: calendarBackend.days
+                    rows: calendarBackend.weeks
+                    dateMatchingPrecision: PlasmaCalendar.Calendar.MatchYearMonthAndDay
+                    borderWidth: 0
+                    dayOfWeekHeaderModel: calendarBackend.days
+                    todayDate: root.today
+                    selectedDate: root.currentDate
+                    highlightShape: Plasmoid.configuration.dayHighlightShape
+                    highlightColor: Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor
 
-                onActivated: (index, dateModel, item) => {
-                    root.currentDate = new Date(dateModel.yearNumber, dateModel.monthNumber - 1, dateModel.dayNumber)
+                    backend: calendarBackend
+                    gridModel: calendarBackend.daysModel
+
+                    onActivated: (index, dateModel, item) => {
+                        root.currentDate = new Date(dateModel.yearNumber, dateModel.monthNumber - 1, dateModel.dayNumber)
+                    }
+                }
+
+                MonthsCalendar {
+                    anchors.fill: parent
+                    visible: root.currentView === 1
+                    backend: calendarBackend
+                    highlightColor: Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor
+                    onMonthSelected: (month) => {
+                        calendarBackend.goToMonth(month)
+                        root.currentView = 0
+                    }
                 }
             }
         }
