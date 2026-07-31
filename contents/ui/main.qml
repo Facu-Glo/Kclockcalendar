@@ -7,6 +7,9 @@ import org.kde.plasma.workspace.calendar as PlasmaCalendar
 PlasmoidItem {
     id: root
 
+    toolTipMainText: Qt.locale().toString(root.now, root.config.popupTimeFormat)
+    toolTipSubText: Qt.locale().toString(root.day, "dddd d MMMM yyyy")
+
     preferredRepresentation: compactRepresentation
 
     property QtObject config: ConfigResolver {}
