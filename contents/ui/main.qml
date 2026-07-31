@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Layouts
-import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasmoid
 import org.kde.plasma.extras as PlasmaExtras
 import org.kde.plasma.workspace.calendar as PlasmaCalendar
@@ -31,8 +30,6 @@ PlasmoidItem {
     }
 
     fullRepresentation: PlasmaExtras.Representation {
-        id: fullRep
-
         Layout.preferredWidth: 340
         Layout.preferredHeight: 460
         Layout.minimumWidth: 340
@@ -46,58 +43,6 @@ PlasmoidItem {
             today: root.today
         }
 
-        PlasmaCalendar.Calendar {
-            id: previousCalendar
-            days: calendarBackend.days
-            weeks: calendarBackend.weeks
-            firstDayOfWeek: calendarBackend.firstDayOfWeek
-            today: calendarBackend.today
-            Component.onCompleted: goToYearAndMonth(fullRep.adjacentYear(-1), fullRep.adjacentMonthNumber(-1))
-        }
-
-        PlasmaCalendar.Calendar {
-            id: nextCalendar
-            days: calendarBackend.days
-            weeks: calendarBackend.weeks
-            firstDayOfWeek: calendarBackend.firstDayOfWeek
-            today: calendarBackend.today
-            Component.onCompleted: goToYearAndMonth(fullRep.adjacentYear(1), fullRep.adjacentMonthNumber(1))
-        }
-
-        function modulo(a, n) {
-            return ((((a - 1) % n) + n) % n) + 1
-        }
-
-        function adjacentMonthNumber(offset) {
-            return modulo(calendarBackend.month + offset, 12)
-        }
-
-        function adjacentYear(offset) {
-            const month = adjacentMonthNumber(offset)
-            if (offset < 0 && month === 12) return calendarBackend.year - 1
-            if (offset > 0 && month === 1) return calendarBackend.year + 1
-            return calendarBackend.year
-        }
-
-        function updateAdjacentMonths() {
-            previousCalendar.goToYearAndMonth(adjacentYear(-1), adjacentMonthNumber(-1))
-            nextCalendar.goToYearAndMonth(adjacentYear(1), adjacentMonthNumber(1))
-        }
-
-        function goToNextMonth() {
-            monthView.changeDate = true
-            monthView.finishChangeIfNeeded()
-            monthView.resetViewPosition()
-            monthView.incrementCurrentIndex()
-        }
-
-        function goToPreviousMonth() {
-            monthView.changeDate = true
-            monthView.finishChangeIfNeeded()
-            monthView.resetViewPosition()
-            monthView.decrementCurrentIndex()
-        }
-
         Connections {
             target: root
             function onExpandedChanged() {
@@ -107,13 +52,6 @@ PlasmoidItem {
                     root.currentView = 0
                     monthView.resetViewPosition()
                 }
-            }
-        }
-
-        Connections {
-            target: calendarBackend
-            function onMonthChanged() {
-                fullRep.updateAdjacentMonths()
             }
         }
 
@@ -129,8 +67,8 @@ PlasmoidItem {
                 monthTitle: calendarBackend.monthName + " " + calendarBackend.year
                 config: root.config
                 onMonthTitleClicked: root.currentView = root.currentView === 0 ? 1 : 0
-                onPreviousMonth: fullRep.goToPreviousMonth()
-                onNextMonth: fullRep.goToNextMonth()
+                onPreviousMonth: monthView.goToPreviousMonth()
+                onNextMonth: monthView.goToNextMonth()
             }
 
             Item {
@@ -138,82 +76,11 @@ PlasmoidItem {
                 Layout.fillHeight: true
                 clip: true
 
-                ListView {
+                MonthSlider {
                     id: monthView
                     anchors.fill: parent
                     visible: root.currentView === 0
-                    clip: true
-
-                    model: 3
-                    snapMode: ListView.SnapToItem
-                    highlightRangeMode: ListView.StrictlyEnforceRange
-                    highlightMoveDuration: Kirigami.Units.longDuration
-                    highlightMoveVelocity: -1
-                    reuseItems: true
-                    keyNavigationEnabled: false
-
-                    property bool changeDate: false
-                    property bool dragHandled: false
-
-                    function finishChangeIfNeeded() {
-                        if (verticalVelocity != 0.0) {
-                            handleDateChange((verticalVelocity < 0.0) ? -1 : 1)
-                        }
-                    }
-
-                    function resetViewPosition() {
-                        currentIndex = 1
-                        positionViewAtIndex(1, ListView.Beginning)
-                    }
-
-                    function handleDrag() {
-                        if (dragHandled) {
-                            resetViewPosition()
-                            return true
-                        }
-                        if (draggingVertically) {
-                            dragHandled = true
-                        }
-                        return false
-                    }
-
-                    function handleDateChange(direction) {
-                        if (handleDrag()) {
-                            return
-                        }
-                        if (changeDate) {
-                            if (direction < 0) {
-                                calendarBackend.previousMonth()
-                            } else {
-                                calendarBackend.nextMonth()
-                            }
-                        } else {
-                            changeDate = true
-                        }
-                        resetViewPosition()
-                    }
-
-                    onAtYEndChanged: {
-                        if (atYEnd) {
-                            handleDateChange(1)
-                        }
-                    }
-
-                    onAtYBeginningChanged: {
-                        if (atYBeginning) {
-                            handleDateChange(-1)
-                        }
-                    }
-
-                    onDraggingVerticallyChanged: {
-                        if (draggingVertically === false) {
-                            dragHandled = false
-                        }
-                    }
-
-                    Component.onCompleted: {
-                        currentIndex = 1
-                    }
+                    backend: calendarBackend
 
                     delegate: DaysCalendar {
                         required property int index
@@ -229,26 +96,11 @@ PlasmoidItem {
                         highlightShape: root.config.dayHighlightShape
                         highlightColor: root.config.highlightColor
 
-                        backend: index === 0 ? previousCalendar : (index === 2 ? nextCalendar : calendarBackend)
-                        gridModel: index === 0 ? previousCalendar.daysModel : (index === 2 ? nextCalendar.daysModel : calendarBackend.daysModel)
+                        backend: index === 0 ? monthView.previousCalendar : (index === 2 ? monthView.nextCalendar : calendarBackend)
+                        gridModel: index === 0 ? monthView.previousModel : (index === 2 ? monthView.nextModel : calendarBackend.daysModel)
 
                         onDateSelected: (d) => {
                             root.currentDate = d
-                        }
-                    }
-
-                    WheelHandler {
-                        acceptedDevices: PointerDevice.Mouse
-                        orientation: Qt.Vertical
-                        onWheel: (wheel) => {
-                            while (rotation >= 15) {
-                                rotation -= 15
-                                fullRep.goToPreviousMonth()
-                            }
-                            while (rotation <= -15) {
-                                rotation += 15
-                                fullRep.goToNextMonth()
-                            }
                         }
                     }
                 }
