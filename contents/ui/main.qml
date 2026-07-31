@@ -36,6 +36,11 @@ PlasmoidItem {
         return f.family ? f : Kirigami.Theme.defaultFont
     }
 
+    property font resolvedPopupFont: {
+        var f = Plasmoid.configuration.popupFont
+        return f.family ? f : Kirigami.Theme.defaultFont
+    }
+
     property int currentView: 0 // 0 = days, 1 = months
 
     property int panelHAlignment: {
@@ -192,9 +197,9 @@ PlasmoidItem {
 
                 PlasmaComponents.Label {
                     font.pixelSize: Plasmoid.configuration.bigClockFontSize
-                    font.weight: Font.ExtraLight
-                    font.family: root.resolvedFont.family
-                    font.italic: root.resolvedFont.italic
+                    font.weight: root.resolvedPopupFont.weight
+                    font.family: root.resolvedPopupFont.family
+                    font.italic: root.resolvedPopupFont.italic
                     color: Plasmoid.configuration.textColor || Kirigami.Theme.textColor
                     text: Qt.locale().toString(root.now, root.popupTimeFormat)
                 }
