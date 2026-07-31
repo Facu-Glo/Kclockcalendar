@@ -62,7 +62,7 @@ PlasmoidItem {
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: 20
-            anchors.topMargin: Plasmoid.location === PlasmaCore.Types.TopEdge ? 4 : 20
+            anchors.topMargin: 0
             spacing: 14
 
             PopupHeader {

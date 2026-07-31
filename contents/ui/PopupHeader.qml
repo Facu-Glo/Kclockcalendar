@@ -33,8 +33,12 @@ ColumnLayout {
 
         PlasmaComponents.Label {
             Layout.alignment: Qt.AlignTop
-            font.pixelSize: 13
-            opacity: 0.85
+            Layout.topMargin: -14
+            Layout.bottomMargin: 12
+
+            font.pixelSize: 16
+            font.weight: Font.Light
+            opacity: 0.80
             font.family: root.config.resolvedFont.family
             font.italic: root.config.resolvedFont.italic
             color: root.config.textColor
