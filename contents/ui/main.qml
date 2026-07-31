@@ -32,6 +32,8 @@ PlasmoidItem {
     fullRepresentation: PlasmaExtras.Representation {
         Layout.preferredWidth: 340
         Layout.preferredHeight: 460
+        Layout.minimumWidth: 340
+        Layout.minimumHeight: 460
 
         PlasmaCalendar.Calendar {
             id: calendarBackend
