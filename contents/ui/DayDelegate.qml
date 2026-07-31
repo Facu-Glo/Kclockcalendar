@@ -54,8 +54,8 @@ PlasmaComponents.AbstractButton {
             return "transparent";
         }
 
-        border.width: (dayStyle.isToday || dayStyle.isSelected) ? 1 : 0
-        border.color: dayStyle.highlightColor
+        border.width: (dayStyle.isToday || dayStyle.isSelected || dayStyle.hovered) ? 1 : 0
+        border.color: dayStyle.hovered ? Qt.alpha(dayStyle.highlightColor, 0.4) : dayStyle.highlightColor
     }
 
     contentItem: PlasmaComponents.Label {

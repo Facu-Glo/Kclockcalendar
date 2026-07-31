@@ -230,12 +230,15 @@ PlasmoidItem {
 
                     Rectangle {
                         anchors.fill: parent
+                        radius: 3
                         color: parent.containsMouse ? Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.15) : "transparent"
+                        border.width: parent.containsMouse ? 1 : 0
+                        border.color: Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.4)
                     }
 
                     PlasmaComponents.Label {
                         id: monthLabel
-                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.centerIn: parent
                         font.pixelSize: 14
                         font.weight: Font.Medium
                         font.family: root.resolvedFont.family

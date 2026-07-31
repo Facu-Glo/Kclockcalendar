@@ -78,8 +78,8 @@ Item {
                             return "transparent"
                         }
 
-                        border.width: parent.isCurrentMonth ? 1 : 0
-                        border.color: root.highlightColor
+                        border.width: (parent.isCurrentMonth || parent.hovered) ? 1 : 0
+                        border.color: parent.hovered ? Qt.alpha(root.highlightColor, 0.4) : root.highlightColor
                     }
 
                     contentItem: PlasmaComponents.Label {
