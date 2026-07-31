@@ -29,7 +29,6 @@ Item {
         columns: daysCalendar.columns
         rows: daysCalendar.rows + 1
 
-        // Encabezados de días de la semana
         Repeater {
             id: dayOfWeekHeaderRepeater
 
@@ -49,7 +48,6 @@ Item {
             }
         }
 
-        // Días
         Repeater {
             id: gridRepeater
 

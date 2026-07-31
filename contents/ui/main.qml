@@ -24,7 +24,7 @@ PlasmoidItem {
     property date day: clock.day
     property date currentDate: clock.day
     property date today: clock.day
-    property int currentView: 0 // 0 = days, 1 = months
+    property int currentView: 0
 
     compactRepresentation: PanelClock {
         now: root.now

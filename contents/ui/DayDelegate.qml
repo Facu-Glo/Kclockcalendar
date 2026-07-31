@@ -63,7 +63,6 @@ PlasmaComponents.AbstractButton {
         font.pixelSize: 13
         font.weight: dayStyle.isToday ? Font.Bold : Font.Normal
         
-        // Texto con el color de tema normal en lugar de forzar blanco sólido
         color: Kirigami.Theme.textColor
     }
 
