@@ -5,7 +5,7 @@ import org.kde.plasma.workspace.calendar as PlasmaCalendar
 Item {
     id: daysCalendar
 
-    signal activated(int index, var date, var item)
+    signal dateSelected(date date)
 
     property int rows
     property int columns
@@ -63,7 +63,7 @@ Item {
                 highlightColor: daysCalendar.highlightColor
 
                 onClicked: {
-                    daysCalendar.activated(index, model, this)
+                    daysCalendar.dateSelected(this.thisDate)
                 }
             }
         }

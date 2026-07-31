@@ -88,8 +88,8 @@ PlasmoidItem {
                     backend: calendarBackend
                     gridModel: calendarBackend.daysModel
 
-                    onActivated: (index, dateModel, item) => {
-                        root.currentDate = new Date(dateModel.yearNumber, dateModel.monthNumber - 1, dateModel.dayNumber)
+                    onDateSelected: (d) => {
+                        root.currentDate = d
                     }
                 }
 
