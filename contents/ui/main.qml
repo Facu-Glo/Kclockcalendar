@@ -216,54 +216,57 @@ PlasmoidItem {
                 opacity: 0.12
             }
 
-            Item {
+            RowLayout {
                 Layout.fillWidth: true
-                implicitHeight: monthLabel.implicitHeight
                 Layout.topMargin: 4
                 Layout.bottomMargin: 4
 
-                MouseArea {
-                    id: monthHeaderMouseArea
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
+                PlasmaComponents.AbstractButton {
+                    id: monthTitleBtn
+                    implicitWidth: monthLabel.implicitWidth + 12
+                    implicitHeight: monthLabel.implicitHeight + 8
                     hoverEnabled: true
+                    background: null
+
                     onClicked: root.currentView = root.currentView === 0 ? 1 : 0
+
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: 4
+                        color: {
+                            if (monthTitleBtn.pressed) return Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.25)
+                            if (monthTitleBtn.hovered) return Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.15)
+                            return "transparent"
+                        }
+                        border.width: monthTitleBtn.hovered ? 1 : 0
+                        border.color: Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.4)
+                    }
+
+                    contentItem: PlasmaComponents.Label {
+                        id: monthLabel
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: 14
+                        font.weight: Font.Medium
+                        font.family: root.resolvedFont.family
+                        font.italic: root.resolvedFont.italic
+                        color: Plasmoid.configuration.textColor || Kirigami.Theme.textColor
+                        text: calendarBackend.monthName + " " + calendarBackend.year
+                    }
                 }
 
-                Rectangle {
-                    anchors.centerIn: monthLabel
-                    width: monthLabel.width + Kirigami.Units.smallSpacing
-                    height: monthLabel.height + Kirigami.Units.smallSpacing
-                    radius: 3
-                    color: monthHeaderMouseArea.containsMouse ? Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.15) : "transparent"
-                    border.width: monthHeaderMouseArea.containsMouse ? 1 : 0
-                    border.color: Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.4)
-                }
-
-                PlasmaComponents.Label {
-                    id: monthLabel
-                    anchors.centerIn: parent
-                    font.pixelSize: 14
-                    font.weight: Font.Medium
-                    font.family: root.resolvedFont.family
-                    font.italic: root.resolvedFont.italic
-                    color: Plasmoid.configuration.textColor || Kirigami.Theme.textColor
-                    text: calendarBackend.monthName + " " + calendarBackend.year
+                Item {
+                    Layout.fillWidth: true
                 }
 
                 PlasmaComponents.ToolButton {
                     icon.name: "go-up-symbolic"
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
                     display: PlasmaComponents.AbstractButton.IconOnly
                     onClicked: calendarBackend.previousMonth()
                 }
 
                 PlasmaComponents.ToolButton {
                     icon.name: "go-down-symbolic"
-                    anchors.right: parent.right
-                    anchors.rightMargin: 30
-                    anchors.verticalCenter: parent.verticalCenter
                     display: PlasmaComponents.AbstractButton.IconOnly
                     onClicked: calendarBackend.nextMonth()
                 }
