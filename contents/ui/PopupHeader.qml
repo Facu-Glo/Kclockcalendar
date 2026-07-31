@@ -23,24 +23,22 @@ ColumnLayout {
 
         PlasmaComponents.Label {
             Layout.alignment: Qt.AlignTop
+            Layout.topMargin: 16 
+            font.family: "sans"
             font.pixelSize: root.config.bigClockFontSize
-            font.weight: root.config.resolvedPopupFont.weight
-            font.family: root.config.resolvedPopupFont.family
-            font.italic: root.config.resolvedPopupFont.italic
+            font.weight: 100
+            
             color: root.config.textColor
             text: Qt.locale().toString(root.now, root.config.popupTimeFormat)
         }
 
         PlasmaComponents.Label {
             Layout.alignment: Qt.AlignTop
-            Layout.topMargin: -14
             Layout.bottomMargin: 12
 
+            font.family: "sans"
             font.pixelSize: 16
-            font.weight: Font.Light
-            opacity: 0.80
-            font.family: root.config.resolvedFont.family
-            font.italic: root.config.resolvedFont.italic
+            font.weight: 300
             color: root.config.textColor
             text: Qt.locale().toString(root.day, "dddd d MMMM yyyy")
         }
@@ -87,8 +85,7 @@ ColumnLayout {
                 verticalAlignment: Text.AlignVCenter
                 font.pixelSize: 14
                 font.weight: Font.Medium
-                font.family: root.config.resolvedFont.family
-                font.italic: root.config.resolvedFont.italic
+                font.family: "sans"
                 color: root.config.textColor
                 text: root.monthTitle
             }
