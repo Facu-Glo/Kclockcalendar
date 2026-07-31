@@ -223,18 +223,21 @@ PlasmoidItem {
                 Layout.bottomMargin: 4
 
                 MouseArea {
+                    id: monthHeaderMouseArea
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     hoverEnabled: true
                     onClicked: root.currentView = root.currentView === 0 ? 1 : 0
+                }
 
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: 3
-                        color: parent.containsMouse ? Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.15) : "transparent"
-                        border.width: parent.containsMouse ? 1 : 0
-                        border.color: Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.4)
-                    }
+                Rectangle {
+                    anchors.centerIn: monthLabel
+                    width: monthLabel.width + Kirigami.Units.smallSpacing
+                    height: monthLabel.height + Kirigami.Units.smallSpacing
+                    radius: 3
+                    color: monthHeaderMouseArea.containsMouse ? Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.15) : "transparent"
+                    border.width: monthHeaderMouseArea.containsMouse ? 1 : 0
+                    border.color: Qt.alpha(Plasmoid.configuration.highlightColor || Kirigami.Theme.highlightColor, 0.4)
                 }
 
                 PlasmaComponents.Label {
