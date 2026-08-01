@@ -3,9 +3,12 @@ import QtQuick
 Item {
     id: root
 
-    property bool showSeconds: true
-    property bool showPopupSeconds: false
+    property string timeFormat: "HH:mm:ss"
+    property string popupTimeFormat: "HH:mm:ss"
     property bool expanded: false
+
+    readonly property bool needsSeconds:
+        root.timeFormat.includes("s") || (root.expanded && root.popupTimeFormat.includes("s"))
 
     property date now: new Date()
     property date day: new Date()
@@ -20,51 +23,30 @@ Item {
         }
     }
 
-    function alignAndStartClock() {
-        syncTimer.stop()
-        clockTimer.stop()
-
-        root.updateNow()
-
-        var needsSeconds = root.showSeconds || (root.showPopupSeconds && root.expanded)
+    function millisecondsToNextTick() {
         var n = new Date()
+        if (root.needsSeconds)
+            return Math.max(1, 1000 - n.getMilliseconds())
+        return Math.max(1, (60 - n.getSeconds()) * 1000 - n.getMilliseconds())
+    }
 
-        if (needsSeconds) {
-            var msToNextSecond = 1000 - n.getMilliseconds()
-            syncTimer.interval = Math.max(1, msToNextSecond)
-            syncTimer.targetInterval = 1000
-            syncTimer.start()
-        } else {
-            var msToNextMinute = (60 - n.getSeconds()) * 1000 - n.getMilliseconds()
-            syncTimer.interval = Math.max(1, msToNextMinute)
-            syncTimer.targetInterval = 60000
-            syncTimer.start()
-        }
+    function alignAndStartClock() {
+        tickTimer.stop()
+        root.updateNow()
+        tickTimer.interval = root.millisecondsToNextTick()
+        tickTimer.start()
     }
 
     Timer {
-        id: syncTimer
-        property int targetInterval: 1000
+        id: tickTimer
         repeat: false
-        onTriggered: {
-            root.updateNow()
-            clockTimer.interval = targetInterval
-            clockTimer.start()
-        }
-    }
-
-    Timer {
-        id: clockTimer
-        repeat: true
-        onTriggered: {
-            root.updateNow()
-        }
+        onTriggered: root.alignAndStartClock()
     }
 
     Connections {
         target: root
-        function onShowSecondsChanged() { root.alignAndStartClock() }
-        function onShowPopupSecondsChanged() { root.alignAndStartClock() }
+        function onTimeFormatChanged() { root.alignAndStartClock() }
+        function onPopupTimeFormatChanged() { root.alignAndStartClock() }
         function onExpandedChanged() { root.alignAndStartClock() }
     }
 

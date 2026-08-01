@@ -8,14 +8,12 @@ KCM.SimpleKCM {
     id: configPage
 
     property alias cfg_timeFormat: timeFormatInput.text
+    property alias cfg_popupTimeFormat: popupTimeFormatInput.text
     property alias cfg_dateFormat: dateFormatInput.text
     property alias cfg_showDate: showDateCheck.checked
     property alias cfg_layoutPosition: layoutBox.currentIndex
     property alias cfg_dateAbove: dateAboveCheck.checked
     property alias cfg_dateFirst: dateFirstCheck.checked
-    property alias cfg_showSeconds: showSecondsCheck.checked
-    property alias cfg_showPopupSeconds: popupSecondsCheck.checked
-    property alias cfg_use24hFormat: use24hCheck.checked
     property alias cfg_firstDayOfWeek: firstDayBox.currentIndex
 
     Kirigami.FormLayout {
@@ -25,8 +23,14 @@ KCM.SimpleKCM {
 
         PlasmaComponents.TextField {
             id: timeFormatInput
-            Kirigami.FormData.label: "Time format:"
-            placeholderText: "hh:mm:ss"
+            Kirigami.FormData.label: "Time format (panel):"
+            placeholderText: "HH:mm:ss"
+        }
+
+        PlasmaComponents.TextField {
+            id: popupTimeFormatInput
+            Kirigami.FormData.label: "Time format (popup):"
+            placeholderText: "HH:mm:ss"
         }
 
         PlasmaComponents.TextField {
@@ -60,21 +64,6 @@ KCM.SimpleKCM {
             visible: layoutBox.currentIndex === 1
             enabled: showDateCheck.checked
             Kirigami.FormData.label: "Date first:"
-        }
-
-        PlasmaComponents.CheckBox {
-            id: showSecondsCheck
-            Kirigami.FormData.label: "Show seconds:"
-        }
-
-        PlasmaComponents.CheckBox {
-            id: popupSecondsCheck
-            Kirigami.FormData.label: "Show seconds (popup):"
-        }
-
-        PlasmaComponents.CheckBox {
-            id: use24hCheck
-            Kirigami.FormData.label: "24-hour format:"
         }
 
         QQC2.ComboBox {

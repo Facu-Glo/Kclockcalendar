@@ -15,8 +15,8 @@ PlasmoidItem {
 
     property QtObject config: ConfigResolver {}
     property Item clock: ClockState {
-        showSeconds: root.config.showSeconds
-        showPopupSeconds: root.config.showPopupSeconds
+        timeFormat: root.config.timeFormat
+        popupTimeFormat: root.config.popupTimeFormat
         expanded: root.expanded
     }
 
