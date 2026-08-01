@@ -29,6 +29,13 @@ KCM.SimpleKCM {
         }
 
         PlasmaComponents.TextField {
+            id: dateFormatInput
+            enabled: showDateCheck.checked
+            Kirigami.FormData.label: "Date format (panel):"
+            placeholderText: "dd/MM/yy"
+        }
+
+        PlasmaComponents.TextField {
             id: popupTimeFormatInput
             Kirigami.FormData.label: "Time format (popup):"
             placeholderText: "HH:mm:ss"
@@ -40,11 +47,13 @@ KCM.SimpleKCM {
             placeholderText: "dddd d MMMM yyyy"
         }
 
-        PlasmaComponents.TextField {
-            id: dateFormatInput
-            enabled: showDateCheck.checked
-            Kirigami.FormData.label: "Date format:"
-            placeholderText: "dd.MM.yy"
+        PlasmaComponents.Label {
+            text: "<a href='https://doc.qt.io/qt-6/qml-qtqml-qt.html#formatDateTime-method'>Date and time format documentation</a>"
+            onLinkActivated: (link) => Qt.openUrlExternally(link)
+
+            HoverHandler {
+                cursorShape: Qt.PointingHandCursor
+            }
         }
 
         PlasmaComponents.CheckBox {
