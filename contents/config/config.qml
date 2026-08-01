@@ -12,4 +12,9 @@ ConfigModel {
         icon: "preferences-desktop-font"
         source: "configApariencia.qml"
     }
+    ConfigCategory {
+        name: i18nc("@title", "Calendar")
+        icon: "view-calendar-month"
+        source: "configFestivos.qml"
+    }
 }
