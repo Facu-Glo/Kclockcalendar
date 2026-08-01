@@ -15,7 +15,6 @@ KCM.SimpleKCM {
     property alias cfg_bigClockFontSize: bigClockFontSizeInput.value
     property alias cfg_textColor: colorInput.text
     property alias cfg_textAlignment: alignmentBox.currentIndex
-    property alias cfg_dayHighlightShape: shapeBox.currentIndex
     property string cfg_highlightColor
 
     Kirigami.FormLayout {
@@ -77,12 +76,6 @@ KCM.SimpleKCM {
             id: alignmentBox
             Kirigami.FormData.label: "Alignment in panel:"
             model: ["Left", "Center", "Right"]
-        }
-
-        QQC2.ComboBox {
-            id: shapeBox
-            Kirigami.FormData.label: "Highlight shape:"
-            model: ["Circle", "Square"]
         }
 
         Row {

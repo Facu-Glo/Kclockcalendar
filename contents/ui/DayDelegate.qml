@@ -14,7 +14,6 @@ PlasmaComponents.AbstractButton {
     property var daysModel: null
     property date todayDate: new Date()
     property date selectedDate: new Date()
-    property int highlightShape: 0
     property color highlightColor: Kirigami.Theme.highlightColor
 
     opacity: dayStyle.isCurrent ? 1.0 : 0.35
@@ -53,10 +52,8 @@ PlasmaComponents.AbstractButton {
     enabled: isCurrent
 
     Rectangle {
-        anchors.centerIn: parent
-        width: dayStyle.highlightShape === 0 ? Math.min(parent.width, parent.height) + 10 : parent.width
-        height: dayStyle.highlightShape === 0 ? width : parent.height
-        radius: dayStyle.highlightShape === 0 ? width / 2 : 4
+        anchors.fill: parent
+        radius: 4
 
         color: {
             if (dayStyle.isToday) return Qt.alpha(dayStyle.highlightColor, 0.25);

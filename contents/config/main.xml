@@ -55,9 +55,6 @@
     <entry name="textAlignment" type="Int">
       <default>1</default>
     </entry>
-    <entry name="dayHighlightShape" type="Int">
-      <default>0</default>
-    </entry>
     <entry name="highlightColor" type="String">
       <default></default>
     </entry>

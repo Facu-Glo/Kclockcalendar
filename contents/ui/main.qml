@@ -113,7 +113,6 @@ PlasmoidItem {
                         dayOfWeekHeaderModel: calendarBackend.days
                         todayDate: root.today
                         selectedDate: root.currentDate
-                        highlightShape: root.config.dayHighlightShape
                         highlightColor: root.config.highlightColor
 
                         backend: index === 0 ? monthView.previousCalendar : (index === 2 ? monthView.nextCalendar : calendarBackend)

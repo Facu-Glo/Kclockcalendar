@@ -13,7 +13,6 @@ Item {
     required property int dateMatchingPrecision
     property date todayDate: new Date()
     property date selectedDate: new Date()
-    property int highlightShape: 0
     property color highlightColor: Kirigami.Theme.highlightColor
 
     property alias dayOfWeekHeaderModel: dayOfWeekHeaderRepeater.model
@@ -58,7 +57,6 @@ Item {
                 dateMatchingPrecision: daysCalendar.dateMatchingPrecision
                 todayDate: daysCalendar.todayDate
                 selectedDate: daysCalendar.selectedDate
-                highlightShape: daysCalendar.highlightShape
                 highlightColor: daysCalendar.highlightColor
 
                 onClicked: {
