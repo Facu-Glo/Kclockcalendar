@@ -58,39 +58,15 @@ ColumnLayout {
         Layout.topMargin: 4
         Layout.bottomMargin: 4
 
-        PlasmaComponents.AbstractButton {
+        PlasmaComponents.ToolButton {
             id: monthTitleBtn
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            implicitWidth: monthLabel.implicitWidth + 12
-            implicitHeight: monthLabel.implicitHeight + 8
-            hoverEnabled: true
-            background: null
-
+            text: root.monthTitle
+            font.pixelSize: 14
+            font.weight: Font.Medium
+            font.family: "sans"
             onClicked: root.monthTitleClicked()
-
-            Rectangle {
-                anchors.fill: parent
-                radius: 4
-                color: {
-                    if (monthTitleBtn.pressed) return Qt.alpha(root.config.highlightColor, 0.25)
-                    if (monthTitleBtn.hovered) return Qt.alpha(root.config.highlightColor, 0.15)
-                    return "transparent"
-                }
-                border.width: monthTitleBtn.hovered ? 1 : 0
-                border.color: Qt.alpha(root.config.highlightColor, 0.4)
-            }
-
-            contentItem: PlasmaComponents.Label {
-                id: monthLabel
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                font.pixelSize: 14
-                font.weight: Font.Medium
-                font.family: "sans"
-                color: root.config.textColor
-                text: root.monthTitle
-            }
         }
 
         RowLayout {
