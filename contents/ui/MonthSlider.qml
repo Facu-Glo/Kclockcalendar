@@ -6,6 +6,7 @@ ListView {
     id: monthSlider
 
     required property PlasmaCalendar.Calendar backend
+    required property PlasmaCalendar.EventPluginsManager eventPluginsManager
 
     readonly property alias previousCalendar: previousBackend
     readonly property alias nextCalendar: nextBackend
@@ -124,7 +125,10 @@ ListView {
         weeks: monthSlider.backend.weeks
         firstDayOfWeek: monthSlider.backend.firstDayOfWeek
         today: monthSlider.backend.today
-        Component.onCompleted: goToYearAndMonth(monthSlider.adjacentYear(-1), monthSlider.adjacentMonthNumber(-1))
+        Component.onCompleted: {
+            goToYearAndMonth(monthSlider.adjacentYear(-1), monthSlider.adjacentMonthNumber(-1))
+            daysModel.setPluginsManager(monthSlider.eventPluginsManager)
+        }
     }
 
     PlasmaCalendar.Calendar {
@@ -133,7 +137,10 @@ ListView {
         weeks: monthSlider.backend.weeks
         firstDayOfWeek: monthSlider.backend.firstDayOfWeek
         today: monthSlider.backend.today
-        Component.onCompleted: goToYearAndMonth(monthSlider.adjacentYear(1), monthSlider.adjacentMonthNumber(1))
+        Component.onCompleted: {
+            goToYearAndMonth(monthSlider.adjacentYear(1), monthSlider.adjacentMonthNumber(1))
+            daysModel.setPluginsManager(monthSlider.eventPluginsManager)
+        }
     }
 
     Connections {

@@ -11,6 +11,7 @@ PlasmaComponents.AbstractButton {
     required property int yearNumber
     required property int dateMatchingPrecision
 
+    property var daysModel: null
     property date todayDate: new Date()
     property date selectedDate: new Date()
     property int highlightShape: 0
@@ -36,13 +37,25 @@ PlasmaComponents.AbstractButton {
                selectedDate.getDate() === thisDate.getDate();
     }
 
+    readonly property bool isHoliday: dayStyle.model.containsEventItems === true
+
+    readonly property var holidayTitles: {
+        if (!dayStyle.daysModel || !dayStyle.isHoliday) return []
+        const events = dayStyle.daysModel.eventsForDate(dayStyle.thisDate)
+        const titles = []
+        for (let i = 0; i < events.length; ++i) {
+            if (events[i].isAllDay) titles.push(events[i].title)
+        }
+        return titles
+    }
+
     hoverEnabled: isCurrent
     enabled: isCurrent
 
     Rectangle {
         anchors.centerIn: parent
-        width: dayStyle.highlightShape === 0 ? Math.min(parent.width, parent.height) - 6 : parent.width - 2
-        height: dayStyle.highlightShape === 0 ? width : parent.height - 2
+        width: dayStyle.highlightShape === 0 ? Math.min(parent.width, parent.height) + 10 : parent.width
+        height: dayStyle.highlightShape === 0 ? width : parent.height
         radius: dayStyle.highlightShape === 0 ? width / 2 : 4
 
         color: {
@@ -56,14 +69,33 @@ PlasmaComponents.AbstractButton {
         border.color: dayStyle.hovered ? Qt.alpha(dayStyle.highlightColor, 0.4) : dayStyle.highlightColor
     }
 
-    contentItem: PlasmaComponents.Label {
-        text: dayStyle.model.dayNumber !== undefined ? dayStyle.model.dayNumber : ""
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        font.pixelSize: 13
-        font.weight: dayStyle.isToday ? Font.Bold : Font.Normal
-        
-        color: Kirigami.Theme.textColor
+    contentItem: Item {
+        PlasmaComponents.Label {
+            anchors.fill: parent
+            text: dayStyle.model.dayNumber !== undefined ? dayStyle.model.dayNumber : ""
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            font.pixelSize: 13
+            font.weight: dayStyle.isToday ? Font.Bold : Font.Normal
+
+            color: Kirigami.Theme.textColor
+        }
+
+        PlasmaComponents.Label {
+            visible: text.length > 0
+            text: dayStyle.model.subDayLabel || ""
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
+            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            maximumLineCount: 1
+            elide: Text.ElideRight
+            color: Kirigami.Theme.textColor
+        }
     }
 
     Rectangle {
@@ -72,8 +104,14 @@ PlasmaComponents.AbstractButton {
         height: 4
         radius: 2
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 2
+        anchors.top: parent.top
+        anchors.topMargin: 4
         color: dayStyle.highlightColor
+    }
+
+    PlasmaComponents.ToolTip {
+        visible: dayStyle.hovered && dayStyle.holidayTitles.length > 0
+        delay: 500
+        text: dayStyle.holidayTitles.join("\n")
     }
 }

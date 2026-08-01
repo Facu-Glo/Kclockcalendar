@@ -33,6 +33,7 @@ QtObject {
     readonly property int bigClockFontSize: Plasmoid.configuration.bigClockFontSize
     readonly property int dayHighlightShape: Plasmoid.configuration.dayHighlightShape
     readonly property int firstDayOfWeek: Plasmoid.configuration.firstDayOfWeek
+    readonly property bool showHolidays: Plasmoid.configuration.showHolidays
 
     readonly property font resolvedFont: {
         var f = Plasmoid.configuration.font

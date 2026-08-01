@@ -35,6 +35,9 @@
     <entry name="firstDayOfWeek" type="Int">
       <default>0</default>
     </entry>
+    <entry name="showHolidays" type="Bool">
+      <default>true</default>
+    </entry>
   </group>
   <group name="Appearance">
     <entry name="font" type="Font">

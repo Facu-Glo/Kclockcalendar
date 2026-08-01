@@ -59,6 +59,15 @@ PlasmoidItem {
             }
         }
 
+        PlasmaCalendar.EventPluginsManager {
+            id: eventPluginsManager
+            enabledPlugins: root.config.showHolidays ? ["holidaysevents"] : []
+        }
+
+        Component.onCompleted: {
+            calendarBackend.daysModel.setPluginsManager(eventPluginsManager)
+        }
+
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: 20
@@ -86,6 +95,7 @@ PlasmoidItem {
                     anchors.fill: parent
                     visible: root.currentView === 0
                     backend: calendarBackend
+                    eventPluginsManager: eventPluginsManager
 
                     delegate: DaysCalendar {
                         required property int index

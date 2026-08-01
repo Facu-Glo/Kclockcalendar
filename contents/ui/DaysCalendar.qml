@@ -54,6 +54,7 @@ Item {
             DayDelegate {
                 width: daysCalendar.cellWidth
                 height: daysCalendar.cellHeight
+                daysModel: daysCalendar.backend ? daysCalendar.backend.daysModel : null
                 dateMatchingPrecision: daysCalendar.dateMatchingPrecision
                 todayDate: daysCalendar.todayDate
                 selectedDate: daysCalendar.selectedDate
