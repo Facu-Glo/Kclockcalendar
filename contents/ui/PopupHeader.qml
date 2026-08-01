@@ -59,7 +59,8 @@ ColumnLayout {
 
         PlasmaComponents.AbstractButton {
             id: monthTitleBtn
-            anchors.centerIn: parent
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
             implicitWidth: monthLabel.implicitWidth + 12
             implicitHeight: monthLabel.implicitHeight + 8
             hoverEnabled: true
