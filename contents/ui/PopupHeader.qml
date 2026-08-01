@@ -41,7 +41,7 @@ ColumnLayout {
             font.pixelSize: 16
             font.weight: 300
             color: root.config.textColor
-            text: Qt.locale().toString(root.day, "dddd d MMMM yyyy")
+            text: Qt.locale().toString(root.day, root.config.popupDateFormat)
         }
     }
 

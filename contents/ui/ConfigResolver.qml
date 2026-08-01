@@ -7,6 +7,7 @@ QtObject {
 
     readonly property string timeFormat: Plasmoid.configuration.timeFormat || "HH:mm:ss"
     readonly property string popupTimeFormat: Plasmoid.configuration.popupTimeFormat || "HH:mm:ss"
+    readonly property string popupDateFormat: Plasmoid.configuration.popupDateFormat || "dddd d MMMM yyyy"
 
     readonly property string dateFormat: Plasmoid.configuration.dateFormat || "dd/MM/yy"
     readonly property int layoutPosition: Plasmoid.configuration.layoutPosition

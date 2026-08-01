@@ -9,6 +9,7 @@ KCM.SimpleKCM {
 
     property alias cfg_timeFormat: timeFormatInput.text
     property alias cfg_popupTimeFormat: popupTimeFormatInput.text
+    property alias cfg_popupDateFormat: popupDateFormatInput.text
     property alias cfg_dateFormat: dateFormatInput.text
     property alias cfg_showDate: showDateCheck.checked
     property alias cfg_layoutPosition: layoutBox.currentIndex
@@ -31,6 +32,12 @@ KCM.SimpleKCM {
             id: popupTimeFormatInput
             Kirigami.FormData.label: "Time format (popup):"
             placeholderText: "HH:mm:ss"
+        }
+
+        PlasmaComponents.TextField {
+            id: popupDateFormatInput
+            Kirigami.FormData.label: "Date format (popup):"
+            placeholderText: "dddd d MMMM yyyy"
         }
 
         PlasmaComponents.TextField {

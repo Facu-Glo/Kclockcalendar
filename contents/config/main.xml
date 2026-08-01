@@ -11,6 +11,9 @@
     <entry name="popupTimeFormat" type="String">
       <default>HH:mm:ss</default>
     </entry>
+    <entry name="popupDateFormat" type="String">
+      <default>dddd d MMMM yyyy</default>
+    </entry>
     <entry name="dateFormat" type="String">
       <default>dd.MM.yy</default>
     </entry>
