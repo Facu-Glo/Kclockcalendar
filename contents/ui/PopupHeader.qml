@@ -9,6 +9,7 @@ ColumnLayout {
     signal monthTitleClicked()
     signal previousMonth()
     signal nextMonth()
+    signal todayClicked()
 
     property date now: new Date()
     property date day: new Date()
@@ -101,6 +102,12 @@ ColumnLayout {
                 icon.name: "go-up-symbolic"
                 display: PlasmaComponents.AbstractButton.IconOnly
                 onClicked: root.previousMonth()
+            }
+
+            PlasmaComponents.ToolButton {
+                icon.name: "go-jump-today-symbolic"
+                display: PlasmaComponents.AbstractButton.IconOnly
+                onClicked: root.todayClicked()
             }
 
             PlasmaComponents.ToolButton {

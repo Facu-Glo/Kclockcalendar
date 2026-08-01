@@ -39,6 +39,13 @@ PlasmoidItem {
         Layout.minimumWidth: 340
         Layout.minimumHeight: 460
 
+        function goToToday() {
+            calendarBackend.resetToToday()
+            root.currentDate = root.today
+            root.currentView = 0
+            monthView.resetViewPosition()
+        }
+
         PlasmaCalendar.Calendar {
             id: calendarBackend
             days: 7
@@ -51,10 +58,7 @@ PlasmoidItem {
             target: root
             function onExpandedChanged() {
                 if (root.expanded) {
-                    calendarBackend.resetToToday()
-                    root.currentDate = root.today
-                    root.currentView = 0
-                    monthView.resetViewPosition()
+                    goToToday()
                 }
             }
         }
@@ -83,6 +87,7 @@ PlasmoidItem {
                 onMonthTitleClicked: root.currentView = root.currentView === 0 ? 1 : 0
                 onPreviousMonth: monthView.goToPreviousMonth()
                 onNextMonth: monthView.goToNextMonth()
+                onTodayClicked: goToToday()
             }
 
             Item {
