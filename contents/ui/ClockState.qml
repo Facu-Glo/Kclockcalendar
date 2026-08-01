@@ -7,8 +7,9 @@ Item {
     property string popupTimeFormat: "HH:mm:ss"
     property bool expanded: false
 
-    readonly property bool needsSeconds:
-        root.timeFormat.includes("s") || (root.expanded && root.popupTimeFormat.includes("s"))
+    function needsSeconds(): bool {
+        return root.timeFormat.includes("s") || (root.expanded && root.popupTimeFormat.includes("s"))
+    }
 
     property date now: new Date()
     property date day: new Date()
@@ -25,7 +26,7 @@ Item {
 
     function millisecondsToNextTick() {
         var n = new Date()
-        if (root.needsSeconds)
+        if (root.needsSeconds())
             return Math.max(1, 1000 - n.getMilliseconds())
         return Math.max(1, (60 - n.getSeconds()) * 1000 - n.getMilliseconds())
     }
