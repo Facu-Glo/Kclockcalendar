@@ -16,7 +16,6 @@ Item {
         spacing: 8
 
         RowLayout {
-            id: yearRow
             Layout.fillWidth: true
 
             PlasmaComponents.ToolButton {
@@ -25,13 +24,20 @@ Item {
                 onClicked: if (backend) backend.goToYear(backend.year - 1)
             }
 
-            PlasmaComponents.Label {
-                Layout.alignment: Qt.AlignCenter
+            Item {
                 Layout.fillWidth: true
+            }
+
+            PlasmaComponents.Label {
+                Layout.alignment: Qt.AlignVCenter
                 font.pixelSize: 14
                 font.weight: Font.Medium
                 horizontalAlignment: Text.AlignHCenter
                 text: backend ? backend.year : ""
+            }
+
+            Item {
+                Layout.fillWidth: true
             }
 
             PlasmaComponents.ToolButton {
@@ -41,14 +47,18 @@ Item {
             }
         }
 
-        GridLayout {
+        Grid {
             id: monthsGrid
             Layout.fillWidth: true
             Layout.fillHeight: true
+
             columns: 3
             rows: 4
             rowSpacing: 6
             columnSpacing: 6
+
+            readonly property real cellWidth: (width - (columns - 1) * columnSpacing) / columns
+            readonly property real cellHeight: (height - (rows - 1) * rowSpacing) / rows
 
             Repeater {
                 model: 12
@@ -56,9 +66,9 @@ Item {
                 PlasmaComponents.AbstractButton {
                     required property int index
 
+                    width: monthsGrid.cellWidth
+                    height: monthsGrid.cellHeight
                     hoverEnabled: true
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
 
                     readonly property int monthNumber: index + 1
 
