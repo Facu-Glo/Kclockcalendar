@@ -17,10 +17,13 @@ QtObject {
     }
 
     function hourText(): string {
-        const has12h = root.timeIs12h()
-        const leading = has12h ? root.timeFormat.includes("hh") : root.timeFormat.includes("HH")
-        const fmt = has12h ? (leading ? "hh" : "h") : (leading ? "HH" : "H")
-        return Qt.locale().toString(root.now, fmt)
+        if (root.timeIs12h()) {
+            const h = root.now.getHours() % 12 || 12
+            const text = String(h)
+            return root.timeFormat.includes("hh") ? text.padStart(2, "0") : text
+        }
+        const leading = root.timeFormat.includes("HH")
+        return Qt.locale().toString(root.now, leading ? "HH" : "H")
     }
 
     function minuteText(): string {
