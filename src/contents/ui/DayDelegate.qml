@@ -15,6 +15,7 @@ PlasmaComponents.AbstractButton {
     property date todayDate: new Date()
     property date selectedDate: new Date()
     property color highlightColor: Kirigami.Theme.highlightColor
+    property QtObject dateUtils: DateUtils {}
 
     opacity: dayStyle.isCurrent ? 1.0 : 0.35
 
@@ -24,17 +25,8 @@ PlasmaComponents.AbstractButton {
         return new Date(yearNumber, monthNumber, dayNumber);
     }
 
-    readonly property bool isToday: {
-        return todayDate.getFullYear() === thisDate.getFullYear() &&
-               todayDate.getMonth() === thisDate.getMonth() &&
-               todayDate.getDate() === thisDate.getDate();
-    }
-
-    readonly property bool isSelected: {
-        return selectedDate.getFullYear() === thisDate.getFullYear() &&
-               selectedDate.getMonth() === thisDate.getMonth() &&
-               selectedDate.getDate() === thisDate.getDate();
-    }
+    readonly property bool isToday: dayStyle.dateUtils.isSameDay(dayStyle.todayDate, dayStyle.thisDate)
+    readonly property bool isSelected: dayStyle.dateUtils.isSameDay(dayStyle.selectedDate, dayStyle.thisDate)
 
     readonly property bool isHoliday: dayStyle.model.containsEventItems === true
 

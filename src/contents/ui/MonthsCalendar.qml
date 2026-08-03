@@ -2,12 +2,14 @@ import QtQuick
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.components as PlasmaComponents
+import org.kde.plasma.workspace.calendar as PlasmaCalendar
 
 Item {
     id: root
 
-    property var backend
+    property PlasmaCalendar.Calendar backend
     property color highlightColor: Kirigami.Theme.highlightColor
+    property QtObject dateUtils: DateUtils {}
 
     signal monthSelected(int month)
 
@@ -73,7 +75,7 @@ Item {
                     readonly property int monthNumber: index + 1
 
                     readonly property bool isCurrentMonth: {
-                        return backend && backend.month === monthNumber
+                        return root.backend && root.dateUtils.isSameMonth(root.backend.today, new Date(root.backend.year, monthNumber - 1, 1))
                     }
 
                     onClicked: root.monthSelected(monthNumber)

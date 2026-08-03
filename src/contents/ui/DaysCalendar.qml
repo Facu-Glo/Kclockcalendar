@@ -14,6 +14,7 @@ Item {
     property date todayDate: new Date()
     property date selectedDate: new Date()
     property color highlightColor: Kirigami.Theme.highlightColor
+    property QtObject dateUtils: DateUtils {}
 
     readonly property int cellWidth: Math.floor(width / columns)
     readonly property int cellHeight: Math.floor(height / (rows + 1))
@@ -57,6 +58,7 @@ Item {
                 todayDate: daysCalendar.todayDate
                 selectedDate: daysCalendar.selectedDate
                 highlightColor: daysCalendar.highlightColor
+                dateUtils: daysCalendar.dateUtils
 
                 onClicked: {
                     daysCalendar.dateSelected(this.thisDate)
