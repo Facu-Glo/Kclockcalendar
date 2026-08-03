@@ -11,6 +11,12 @@ KCM.SimpleKCM {
     id: configPage
 
     property font cfg_font
+    property alias cfg_showDate: showDateCheck.checked
+    property alias cfg_layoutPosition: layoutBox.currentIndex
+    property alias cfg_dateAbove: dateAboveCheck.checked
+    property alias cfg_dateMonthBelow: dateMonthBelowCheck.checked
+    property alias cfg_dateFirst: dateFirstCheck.checked
+    property alias cfg_dateTimeSpacing: dateTimeSpacingInput.value
     property alias cfg_timeFontSize: timeFontSizeInput.value
     property alias cfg_dateFontSize: dateFontSizeInput.value
     property alias cfg_ampmFontSize: ampmFontSizeInput.value
@@ -23,6 +29,46 @@ KCM.SimpleKCM {
         id: formLayout
         anchors.left: parent.left
         anchors.right: parent.right
+
+        PlasmaComponents.CheckBox {
+            id: showDateCheck
+            Kirigami.FormData.label: "Show date in panel:"
+        }
+
+        QQC2.ComboBox {
+            id: layoutBox
+            Kirigami.FormData.label: "Position in panel:"
+            model: ["Vertical", "Horizontal", "Stacked"]
+        }
+
+        PlasmaComponents.CheckBox {
+            id: dateAboveCheck
+            visible: layoutBox.currentIndex === 0 || layoutBox.currentIndex === 2
+            enabled: showDateCheck.checked
+            Kirigami.FormData.label: "Date above:"
+        }
+
+        PlasmaComponents.CheckBox {
+            id: dateMonthBelowCheck
+            visible: layoutBox.currentIndex === 2
+            enabled: showDateCheck.checked
+            Kirigami.FormData.label: "Month below date (stacked):"
+        }
+
+        PlasmaComponents.CheckBox {
+            id: dateFirstCheck
+            visible: layoutBox.currentIndex === 1
+            enabled: showDateCheck.checked
+            Kirigami.FormData.label: "Date first:"
+        }
+
+        QQC2.SpinBox {
+            id: dateTimeSpacingInput
+            from: 0
+            to: 24
+            enabled: showDateCheck.checked
+            Kirigami.FormData.label: "Space between time and date:"
+        }
 
         QtDialogs.FontDialog {
             id: fontDialog

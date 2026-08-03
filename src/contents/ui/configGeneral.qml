@@ -11,11 +11,6 @@ KCM.SimpleKCM {
     property alias cfg_popupTimeFormat: popupTimeFormatInput.text
     property alias cfg_popupDateFormat: popupDateFormatInput.text
     property alias cfg_dateFormat: dateFormatInput.text
-    property alias cfg_showDate: showDateCheck.checked
-    property alias cfg_layoutPosition: layoutBox.currentIndex
-    property alias cfg_dateAbove: dateAboveCheck.checked
-    property alias cfg_dateMonthBelow: dateMonthBelowCheck.checked
-    property alias cfg_dateFirst: dateFirstCheck.checked
     property alias cfg_firstDayOfWeek: firstDayBox.currentIndex
 
     Kirigami.FormLayout {
@@ -31,7 +26,6 @@ KCM.SimpleKCM {
 
         PlasmaComponents.TextField {
             id: dateFormatInput
-            enabled: showDateCheck.checked
             Kirigami.FormData.label: "Date format (panel):"
             placeholderText: "dd/MM/yy"
         }
@@ -55,39 +49,6 @@ KCM.SimpleKCM {
             HoverHandler {
                 cursorShape: Qt.PointingHandCursor
             }
-        }
-
-        PlasmaComponents.CheckBox {
-            id: showDateCheck
-            Kirigami.FormData.label: "Show date in panel:"
-        }
-
-        QQC2.ComboBox {
-            id: layoutBox
-            enabled: showDateCheck.checked
-            Kirigami.FormData.label: "Position in panel:"
-            model: ["Vertical", "Horizontal", "Stacked"]
-        }
-
-        PlasmaComponents.CheckBox {
-            id: dateAboveCheck
-            visible: layoutBox.currentIndex === 0 || layoutBox.currentIndex === 2
-            enabled: showDateCheck.checked
-            Kirigami.FormData.label: "Date above:"
-        }
-
-        PlasmaComponents.CheckBox {
-            id: dateMonthBelowCheck
-            visible: layoutBox.currentIndex === 2
-            enabled: showDateCheck.checked
-            Kirigami.FormData.label: "Month below date (stacked):"
-        }
-
-        PlasmaComponents.CheckBox {
-            id: dateFirstCheck
-            visible: layoutBox.currentIndex === 1
-            enabled: showDateCheck.checked
-            Kirigami.FormData.label: "Date first:"
         }
 
         QQC2.ComboBox {
