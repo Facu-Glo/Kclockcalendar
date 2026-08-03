@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
 import org.kde.plasma.components as PlasmaComponents
 
 PlasmaComponents.Label {
@@ -8,15 +9,17 @@ PlasmaComponents.Label {
     property string textSource: ""
     property int fontSize: 12
     property bool fillWidth: false
-    required property QtObject config
+    property font labelFont: Qt.application.font
+    property color labelColor: Kirigami.Theme.textColor
+    property int hAlignment: Text.AlignHCenter
 
     Layout.fillWidth: fillWidth
     Layout.alignment: Qt.AlignHCenter
     font.pixelSize: fontSize
-    font.weight: root.config.resolvedFont.weight
-    font.family: root.config.resolvedFont.family
-    font.italic: root.config.resolvedFont.italic
-    color: root.config.textColor
-    horizontalAlignment: root.config.panelHAlignment
+    font.weight: root.labelFont.weight
+    font.family: root.labelFont.family
+    font.italic: root.labelFont.italic
+    color: root.labelColor
+    horizontalAlignment: root.hAlignment
     text: root.textSource
 }

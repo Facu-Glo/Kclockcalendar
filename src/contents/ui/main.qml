@@ -23,7 +23,7 @@ PlasmoidItem {
     property date now: clock.now
     property date today: clock.today
     property date selectedDate: clock.today
-    property int currentView: 0
+    property bool showingYear: false
 
     compactRepresentation: PanelClock {
         now: root.now
@@ -41,7 +41,7 @@ PlasmoidItem {
         function goToToday() {
             calendarBackend.resetToToday()
             root.selectedDate = root.today
-            root.currentView = 0
+            root.showingYear = false
             monthView.resetViewPosition()
         }
 
@@ -79,11 +79,12 @@ PlasmoidItem {
 
             PopupHeader {
                 Layout.fillWidth: true
-                now: root.now
-                today: root.today
                 monthTitle: calendarBackend.monthName + " " + calendarBackend.year
-                config: root.config
-                onMonthTitleClicked: root.currentView = root.currentView === 0 ? 1 : 0
+                clockText: Qt.locale().toString(root.now, root.config.popupTimeFormat)
+                dateText: Qt.locale().toString(root.today, root.config.popupDateFormat)
+                clockFontSize: root.config.bigClockFontSize
+                labelColor: root.config.textColor
+                onMonthTitleClicked: root.showingYear = !root.showingYear
                 onPreviousMonth: monthView.goToPreviousMonth()
                 onNextMonth: monthView.goToNextMonth()
                 onTodayClicked: goToToday()
@@ -97,7 +98,7 @@ PlasmoidItem {
                 MonthSlider {
                     id: monthView
                     anchors.fill: parent
-                    visible: root.currentView === 0
+                    visible: root.showingYear === false
                     backend: calendarBackend
                     eventPluginsManager: eventPluginsManager
 
@@ -123,12 +124,12 @@ PlasmoidItem {
 
                 MonthsCalendar {
                     anchors.fill: parent
-                    visible: root.currentView === 1
+                    visible: root.showingYear
                     backend: calendarBackend
                     highlightColor: root.config.highlightColor
                     onMonthSelected: (month) => {
                         calendarBackend.goToMonth(month)
-                        root.currentView = 0
+                        root.showingYear = false
                     }
                 }
             }

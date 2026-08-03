@@ -14,6 +14,10 @@ MouseArea {
 
     readonly property bool inVerticalPanel: Plasmoid.formFactor === PlasmaCore.Types.Vertical
 
+    readonly property font labelFont: root.config.resolvedFont
+    readonly property color labelColor: root.config.textColor
+    readonly property int hAlignment: root.config.panelHAlignment
+
     Layout.fillWidth: inVerticalPanel
     Layout.fillHeight: !inVerticalPanel
     Layout.minimumWidth: inVerticalPanel ? 0 : layoutLoader.implicitWidth
@@ -32,32 +36,24 @@ MouseArea {
     Loader {
         id: layoutLoader
         anchors.centerIn: parent
-        sourceComponent: root.config.layoutPosition === 1 ? rowLayoutComponent
-                      : root.config.layoutPosition === 2 ? stackedTimeComponent
-                      : columnLayoutComponent
+        sourceComponent: root.config.layoutPosition === "stacked" ? stackedTimeComponent : lineLayoutComponent
     }
 
     Component {
-        id: columnLayoutComponent
+        id: lineLayoutComponent
 
-        ColumnLayout {
+        ClockLineLayout {
+            isRow: root.config.layoutPosition === "horizontal"
+            dateIsFirst: root.config.layoutPosition === "horizontal" ? root.config.dateFirst : root.config.dateAbove
+            showDate: root.config.showDate
             spacing: root.config.dateTimeSpacing
-
-            Repeater {
-                model: 2
-
-                ClockPanelLabel {
-                    required property int index
-
-                    readonly property bool isDate: root.config.dateAbove ? index === 0 : index === 1
-
-                    fillWidth: true
-                    fontSize: isDate ? root.config.dateFontSize : root.config.timeFontSize
-                    config: root.config
-                    textSource: isDate ? root.textResolver.fullDateText() : root.textResolver.fullTimeText()
-                    visible: !isDate || root.config.showDate
-                }
-            }
+            dateFontSize: root.config.dateFontSize
+            timeFontSize: root.config.timeFontSize
+            labelFont: root.labelFont
+            labelColor: root.labelColor
+            hAlignment: root.hAlignment
+            timeText: root.textResolver.fullTimeText()
+            dateText: root.textResolver.fullDateText()
         }
     }
 
@@ -83,21 +79,27 @@ MouseArea {
                 ClockPanelLabel {
                     Layout.fillWidth: true
                     fontSize: root.config.timeFontSize
-                    config: root.config
+                    labelFont: root.labelFont
+                    labelColor: root.labelColor
+                    hAlignment: root.hAlignment
                     textSource: root.textResolver.hourText()
                 }
 
                 ClockPanelLabel {
                     Layout.fillWidth: true
                     fontSize: root.config.timeFontSize
-                    config: root.config
+                    labelFont: root.labelFont
+                    labelColor: root.labelColor
+                    hAlignment: root.hAlignment
                     textSource: root.textResolver.minuteText()
                 }
 
                 ClockPanelLabel {
                     Layout.fillWidth: true
                     fontSize: root.config.timeFontSize
-                    config: root.config
+                    labelFont: root.labelFont
+                    labelColor: root.labelColor
+                    hAlignment: root.hAlignment
                     textSource: root.textResolver.secondText()
                     visible: root.textResolver.timeHasSeconds()
                 }
@@ -105,7 +107,9 @@ MouseArea {
                 ClockPanelLabel {
                     Layout.fillWidth: true
                     fontSize: root.config.ampmFontSize
-                    config: root.config
+                    labelFont: root.labelFont
+                    labelColor: root.labelColor
+                    hAlignment: root.hAlignment
                     textSource: root.textResolver.ampmText()
                     visible: root.textResolver.ampmText() !== ""
                 }
@@ -127,7 +131,9 @@ MouseArea {
 
         ClockPanelLabel {
             fontSize: root.config.dateFontSize
-            config: root.config
+            labelFont: root.labelFont
+            labelColor: root.labelColor
+            hAlignment: root.hAlignment
             textSource: root.textResolver.fullDateText()
         }
     }
@@ -141,39 +147,20 @@ MouseArea {
             ClockPanelLabel {
                 Layout.fillWidth: true
                 fontSize: root.config.dateFontSize
-                config: root.config
+                labelFont: root.labelFont
+                labelColor: root.labelColor
+                hAlignment: root.hAlignment
                 textSource: root.textResolver.dateMainText()
             }
 
             ClockPanelLabel {
                 Layout.fillWidth: true
                 fontSize: root.config.dateFontSize
-                config: root.config
+                labelFont: root.labelFont
+                labelColor: root.labelColor
+                hAlignment: root.hAlignment
                 textSource: root.textResolver.dateMonthText()
                 visible: root.textResolver.dateMonthText() !== ""
-            }
-        }
-    }
-
-    Component {
-        id: rowLayoutComponent
-
-        RowLayout {
-            spacing: root.config.dateTimeSpacing
-
-            Repeater {
-                model: 2
-
-                ClockPanelLabel {
-                    required property int index
-
-                    readonly property bool isDate: root.config.dateFirst ? index === 0 : index === 1
-
-                    fontSize: isDate ? root.config.dateFontSize : root.config.timeFontSize
-                    config: root.config
-                    textSource: isDate ? root.textResolver.fullDateText() : root.textResolver.fullTimeText()
-                    visible: !isDate || root.config.showDate
-                }
             }
         }
     }

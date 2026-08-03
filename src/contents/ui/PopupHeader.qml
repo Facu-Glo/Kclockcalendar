@@ -11,10 +11,11 @@ ColumnLayout {
     signal nextMonth()
     signal todayClicked()
 
-    property date now: new Date()
-    property date today: new Date()
+    property string clockText: ""
+    property string dateText: ""
     property string monthTitle: ""
-    required property QtObject config
+    property int clockFontSize: 42
+    property color labelColor: Kirigami.Theme.textColor
 
     spacing: 14
 
@@ -24,13 +25,13 @@ ColumnLayout {
 
         PlasmaComponents.Label {
             Layout.alignment: Qt.AlignTop
-            Layout.topMargin: 16 
+            Layout.topMargin: 16
             font.family: "sans"
-            font.pixelSize: root.config.bigClockFontSize
             font.weight: 100
-            
-            color: root.config.textColor
-            text: Qt.locale().toString(root.now, root.config.popupTimeFormat)
+            font.pixelSize: root.clockFontSize
+
+            color: root.labelColor
+            text: root.clockText
         }
 
         PlasmaComponents.Label {
@@ -38,10 +39,10 @@ ColumnLayout {
             Layout.bottomMargin: 12
 
             font.family: "sans"
-            font.pixelSize: 16
             font.weight: 300
-            color: root.config.textColor
-            text: Qt.locale().toString(root.today, root.config.popupDateFormat)
+            font.pixelSize: 16
+            color: root.labelColor
+            text: root.dateText
         }
     }
 
@@ -65,7 +66,6 @@ ColumnLayout {
             text: root.monthTitle
             font.pixelSize: 14
             font.weight: Font.Medium
-            font.family: "sans"
             onClicked: root.monthTitleClicked()
         }
 
