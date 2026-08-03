@@ -15,6 +15,7 @@ QtObject {
     readonly property bool dateMonthBelow: Plasmoid.configuration.dateMonthBelow
     readonly property bool dateFirst: Plasmoid.configuration.dateFirst
     readonly property bool showDate: Plasmoid.configuration.showDate
+    readonly property int dateTimeSpacing: Plasmoid.configuration.dateTimeSpacing
     readonly property int timeFontSize: Plasmoid.configuration.timeFontSize
     readonly property int dateFontSize: Plasmoid.configuration.dateFontSize
     readonly property int ampmFontSize: Plasmoid.configuration.ampmFontSize
