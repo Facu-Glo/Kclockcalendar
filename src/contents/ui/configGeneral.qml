@@ -65,12 +65,12 @@ KCM.SimpleKCM {
             id: layoutBox
             enabled: showDateCheck.checked
             Kirigami.FormData.label: "Position in panel:"
-            model: ["Vertical", "Horizontal"]
+            model: ["Vertical", "Horizontal", "Stacked"]
         }
 
         PlasmaComponents.CheckBox {
             id: dateAboveCheck
-            visible: layoutBox.currentIndex === 0
+            visible: layoutBox.currentIndex === 0 || layoutBox.currentIndex === 2
             enabled: showDateCheck.checked
             Kirigami.FormData.label: "Date above:"
         }

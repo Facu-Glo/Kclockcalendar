@@ -16,6 +16,7 @@ QtObject {
     readonly property bool showDate: Plasmoid.configuration.showDate
     readonly property int timeFontSize: Plasmoid.configuration.timeFontSize
     readonly property int dateFontSize: Plasmoid.configuration.dateFontSize
+    readonly property int ampmFontSize: Plasmoid.configuration.ampmFontSize
     readonly property int bigClockFontSize: Plasmoid.configuration.bigClockFontSize
     readonly property int firstDayOfWeek: Plasmoid.configuration.firstDayOfWeek
     readonly property bool showHolidays: Plasmoid.configuration.showHolidays

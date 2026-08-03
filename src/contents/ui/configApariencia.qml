@@ -4,6 +4,7 @@ import QtQuick.Dialogs as QtDialogs
 import org.kde.kirigami as Kirigami
 import org.kde.kcmutils as KCM
 import org.kde.plasma.components as PlasmaComponents
+import org.kde.plasma.plasmoid
 import org.kde.kquickcontrols as KQuickControls
 
 KCM.SimpleKCM {
@@ -12,6 +13,7 @@ KCM.SimpleKCM {
     property font cfg_font
     property alias cfg_timeFontSize: timeFontSizeInput.value
     property alias cfg_dateFontSize: dateFontSizeInput.value
+    property alias cfg_ampmFontSize: ampmFontSizeInput.value
     property alias cfg_bigClockFontSize: bigClockFontSizeInput.value
     property alias cfg_textColor: colorInput.text
     property alias cfg_textAlignment: alignmentBox.currentIndex
@@ -57,6 +59,17 @@ KCM.SimpleKCM {
             from: 8
             to: 72
             Kirigami.FormData.label: "Date size (panel):"
+        }
+
+        QQC2.SpinBox {
+            id: ampmFontSizeInput
+            from: 8
+            to: 72
+            enabled: {
+                var f = Plasmoid.configuration.timeFormat || ""
+                return f.includes("ap") || f.includes("AP")
+            }
+            Kirigami.FormData.label: "AM/PM size (panel):"
         }
 
         QQC2.SpinBox {

@@ -46,6 +46,9 @@
     <entry name="dateFontSize" type="Int">
       <default>10</default>
     </entry>
+    <entry name="ampmFontSize" type="Int">
+      <default>10</default>
+    </entry>
     <entry name="bigClockFontSize" type="Int">
       <default>42</default>
     </entry>
