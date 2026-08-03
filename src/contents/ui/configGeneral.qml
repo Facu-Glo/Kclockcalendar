@@ -14,6 +14,7 @@ KCM.SimpleKCM {
     property alias cfg_showDate: showDateCheck.checked
     property alias cfg_layoutPosition: layoutBox.currentIndex
     property alias cfg_dateAbove: dateAboveCheck.checked
+    property alias cfg_dateMonthBelow: dateMonthBelowCheck.checked
     property alias cfg_dateFirst: dateFirstCheck.checked
     property alias cfg_firstDayOfWeek: firstDayBox.currentIndex
 
@@ -73,6 +74,13 @@ KCM.SimpleKCM {
             visible: layoutBox.currentIndex === 0 || layoutBox.currentIndex === 2
             enabled: showDateCheck.checked
             Kirigami.FormData.label: "Date above:"
+        }
+
+        PlasmaComponents.CheckBox {
+            id: dateMonthBelowCheck
+            visible: layoutBox.currentIndex === 2
+            enabled: showDateCheck.checked
+            Kirigami.FormData.label: "Month below date (stacked):"
         }
 
         PlasmaComponents.CheckBox {

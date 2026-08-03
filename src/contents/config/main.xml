@@ -26,6 +26,9 @@
     <entry name="dateAbove" type="Bool">
       <default>false</default>
     </entry>
+    <entry name="dateMonthBelow" type="Bool">
+      <default>false</default>
+    </entry>
     <entry name="dateFirst" type="Bool">
       <default>false</default>
     </entry>
