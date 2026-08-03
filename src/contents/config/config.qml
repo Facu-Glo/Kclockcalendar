@@ -10,11 +10,11 @@ ConfigModel {
     ConfigCategory {
         name: i18nc("@title", "Appearance")
         icon: "preferences-desktop-font"
-        source: "configApariencia.qml"
+        source: "configAppearance.qml"
     }
     ConfigCategory {
         name: i18nc("@title", "Calendar")
         icon: "view-calendar-month"
-        source: "configFestivos.qml"
+        source: "configCalendar.qml"
     }
 }

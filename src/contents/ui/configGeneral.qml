@@ -11,7 +11,7 @@ KCM.SimpleKCM {
     property alias cfg_popupTimeFormat: popupTimeFormatInput.text
     property alias cfg_popupDateFormat: popupDateFormatInput.text
     property alias cfg_dateFormat: dateFormatInput.text
-    property alias cfg_firstDayOfWeek: firstDayBox.currentIndex
+    property alias cfg_firstDayOfWeek: firstDayBox.currentValue
 
     Kirigami.FormLayout {
         id: formLayout
@@ -20,30 +20,30 @@ KCM.SimpleKCM {
 
         PlasmaComponents.TextField {
             id: timeFormatInput
-            Kirigami.FormData.label: "Time format (panel):"
+            Kirigami.FormData.label: i18n("Time format (panel):")
             placeholderText: "HH:mm:ss"
         }
 
         PlasmaComponents.TextField {
             id: dateFormatInput
-            Kirigami.FormData.label: "Date format (panel):"
+            Kirigami.FormData.label: i18n("Date format (panel):")
             placeholderText: "dd/MM/yy"
         }
 
         PlasmaComponents.TextField {
             id: popupTimeFormatInput
-            Kirigami.FormData.label: "Time format (popup):"
+            Kirigami.FormData.label: i18n("Time format (popup):")
             placeholderText: "HH:mm:ss"
         }
 
         PlasmaComponents.TextField {
             id: popupDateFormatInput
-            Kirigami.FormData.label: "Date format (popup):"
+            Kirigami.FormData.label: i18n("Date format (popup):")
             placeholderText: "dddd d MMMM yyyy"
         }
 
         PlasmaComponents.Label {
-            text: "<a href='https://doc.qt.io/qt-6/qml-qtqml-qt.html#formatDateTime-method'>Date and time format documentation</a>"
+            text: i18n("<a href='https://doc.qt.io/qt-6/qml-qtqml-qt.html#formatDateTime-method'>Date and time format documentation</a>")
             onLinkActivated: (link) => Qt.openUrlExternally(link)
 
             HoverHandler {
@@ -53,8 +53,19 @@ KCM.SimpleKCM {
 
         QQC2.ComboBox {
             id: firstDayBox
-            Kirigami.FormData.label: "First day of week:"
-            model: ["Default", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+            Kirigami.FormData.label: i18n("First day of week:")
+            textRole: "text"
+            valueRole: "value"
+            model: [
+                { value: 0, text: i18n("Default") },
+                { value: Qt.Monday, text: i18n("Monday") },
+                { value: Qt.Tuesday, text: i18n("Tuesday") },
+                { value: Qt.Wednesday, text: i18n("Wednesday") },
+                { value: Qt.Thursday, text: i18n("Thursday") },
+                { value: Qt.Friday, text: i18n("Friday") },
+                { value: Qt.Saturday, text: i18n("Saturday") },
+                { value: Qt.Sunday, text: i18n("Sunday") }
+            ]
         }
     }
 }

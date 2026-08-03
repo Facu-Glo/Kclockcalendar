@@ -10,7 +10,14 @@ QtObject {
     readonly property string popupDateFormat: Plasmoid.configuration.popupDateFormat || "dddd d MMMM yyyy"
 
     readonly property string dateFormat: Plasmoid.configuration.dateFormat || "dd/MM/yy"
-    readonly property int layoutPosition: Plasmoid.configuration.layoutPosition
+    readonly property string layoutPosition: {
+        switch (Plasmoid.configuration.layoutPosition) {
+            case "0": return "vertical"
+            case "1": return "horizontal"
+            case "2": return "stacked"
+            default: return Plasmoid.configuration.layoutPosition
+        }
+    }
     readonly property bool dateAbove: Plasmoid.configuration.dateAbove
     readonly property bool dateMonthBelow: Plasmoid.configuration.dateMonthBelow
     readonly property bool dateFirst: Plasmoid.configuration.dateFirst
@@ -33,8 +40,10 @@ QtObject {
 
     readonly property int panelHAlignment: {
         switch (Plasmoid.configuration.textAlignment) {
-            case 0: return Text.AlignLeft
-            case 2: return Text.AlignRight
+            case "left": return Text.AlignLeft
+            case "right": return Text.AlignRight
+            case "0": return Text.AlignLeft
+            case "2": return Text.AlignRight
             default: return Text.AlignHCenter
         }
     }

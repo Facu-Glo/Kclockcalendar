@@ -20,8 +20,8 @@
     <entry name="showDate" type="Bool">
       <default>true</default>
     </entry>
-    <entry name="layoutPosition" type="Int">
-      <default>0</default>
+    <entry name="layoutPosition" type="String">
+      <default>vertical</default>
     </entry>
     <entry name="dateAbove" type="Bool">
       <default>false</default>
@@ -61,8 +61,8 @@
     <entry name="textColor" type="String">
       <default></default>
     </entry>
-    <entry name="textAlignment" type="Int">
-      <default>1</default>
+    <entry name="textAlignment" type="String">
+      <default>center</default>
     </entry>
     <entry name="highlightColor" type="String">
       <default></default>

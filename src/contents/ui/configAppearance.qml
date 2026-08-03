@@ -12,7 +12,7 @@ KCM.SimpleKCM {
 
     property font cfg_font
     property alias cfg_showDate: showDateCheck.checked
-    property alias cfg_layoutPosition: layoutBox.currentIndex
+    property alias cfg_layoutPosition: layoutBox.currentValue
     property alias cfg_dateAbove: dateAboveCheck.checked
     property alias cfg_dateMonthBelow: dateMonthBelowCheck.checked
     property alias cfg_dateFirst: dateFirstCheck.checked
@@ -22,7 +22,7 @@ KCM.SimpleKCM {
     property alias cfg_ampmFontSize: ampmFontSizeInput.value
     property alias cfg_bigClockFontSize: bigClockFontSizeInput.value
     property alias cfg_textColor: colorInput.text
-    property alias cfg_textAlignment: alignmentBox.currentIndex
+    property alias cfg_textAlignment: alignmentBox.currentValue
     property string cfg_highlightColor
 
     Kirigami.FormLayout {
@@ -32,34 +32,40 @@ KCM.SimpleKCM {
 
         PlasmaComponents.CheckBox {
             id: showDateCheck
-            Kirigami.FormData.label: "Show date in panel:"
+            Kirigami.FormData.label: i18n("Show date in panel:")
         }
 
         QQC2.ComboBox {
             id: layoutBox
-            Kirigami.FormData.label: "Position in panel:"
-            model: ["Vertical", "Horizontal", "Stacked"]
+            Kirigami.FormData.label: i18n("Position in panel:")
+            textRole: "text"
+            valueRole: "value"
+            model: [
+                { value: "vertical", text: i18n("Vertical") },
+                { value: "horizontal", text: i18n("Horizontal") },
+                { value: "stacked", text: i18n("Stacked") }
+            ]
         }
 
         PlasmaComponents.CheckBox {
             id: dateAboveCheck
-            visible: layoutBox.currentIndex === 0 || layoutBox.currentIndex === 2
+            visible: layoutBox.currentValue === "vertical" || layoutBox.currentValue === "stacked"
             enabled: showDateCheck.checked
-            Kirigami.FormData.label: "Date above:"
+            Kirigami.FormData.label: i18n("Date above:")
         }
 
         PlasmaComponents.CheckBox {
             id: dateMonthBelowCheck
-            visible: layoutBox.currentIndex === 2
+            visible: layoutBox.currentValue === "stacked"
             enabled: showDateCheck.checked
-            Kirigami.FormData.label: "Month below date (stacked):"
+            Kirigami.FormData.label: i18n("Month below date (stacked):")
         }
 
         PlasmaComponents.CheckBox {
             id: dateFirstCheck
-            visible: layoutBox.currentIndex === 1
+            visible: layoutBox.currentValue === "horizontal"
             enabled: showDateCheck.checked
-            Kirigami.FormData.label: "Date first:"
+            Kirigami.FormData.label: i18n("Date first:")
         }
 
         QQC2.SpinBox {
@@ -67,7 +73,7 @@ KCM.SimpleKCM {
             from: 0
             to: 24
             enabled: showDateCheck.checked
-            Kirigami.FormData.label: "Space between time and date:"
+            Kirigami.FormData.label: i18n("Space between time and date:")
         }
 
         QtDialogs.FontDialog {
@@ -76,16 +82,16 @@ KCM.SimpleKCM {
         }
 
         Row {
-            Kirigami.FormData.label: "Font:"
+            Kirigami.FormData.label: i18n("Font:")
             spacing: Kirigami.Units.smallSpacing
 
             PlasmaComponents.Label {
                 anchors.verticalCenter: parent.verticalCenter
-                text: cfg_font.family || "(default)"
+                text: cfg_font.family || i18n("(default)")
             }
 
             QQC2.Button {
-                text: "Choose..."
+                text: i18n("Choose...")
                 onClicked: {
                     if (cfg_font && cfg_font.family) fontDialog.selectedFont = cfg_font
                     fontDialog.open()
@@ -97,48 +103,55 @@ KCM.SimpleKCM {
             id: timeFontSizeInput
             from: 8
             to: 72
-            Kirigami.FormData.label: "Time size (panel):"
+            Kirigami.FormData.label: i18n("Time size (panel):")
         }
 
         QQC2.SpinBox {
             id: dateFontSizeInput
             from: 8
             to: 72
-            Kirigami.FormData.label: "Date size (panel):"
+            Kirigami.FormData.label: i18n("Date size (panel):")
         }
 
         QQC2.SpinBox {
             id: ampmFontSizeInput
             from: 8
             to: 72
+            visible: layoutBox.currentValue === "stacked"
             enabled: {
                 var f = Plasmoid.configuration.timeFormat || ""
-                return f.includes("ap") || f.includes("AP")
+                return layoutBox.currentValue === "stacked" && (f.includes("ap") || f.includes("AP"))
             }
-            Kirigami.FormData.label: "AM/PM size (panel):"
+            Kirigami.FormData.label: i18n("AM/PM size (panel):")
         }
 
         QQC2.SpinBox {
             id: bigClockFontSizeInput
             from: 20
             to: 120
-            Kirigami.FormData.label: "Clock size (popup):"
+            Kirigami.FormData.label: i18n("Clock size (popup):")
         }
 
         PlasmaComponents.TextField {
             id: colorInput
-            Kirigami.FormData.label: "Text color:"
-            placeholderText: "empty = default (e.g. #ffffff)"
+            Kirigami.FormData.label: i18n("Text color:")
+            placeholderText: i18n("empty = default (e.g. #ffffff)")
         }
 
         QQC2.ComboBox {
             id: alignmentBox
-            Kirigami.FormData.label: "Alignment in panel:"
-            model: ["Left", "Center", "Right"]
+            Kirigami.FormData.label: i18n("Alignment in panel:")
+            textRole: "text"
+            valueRole: "value"
+            model: [
+                { value: "left", text: i18n("Left") },
+                { value: "center", text: i18n("Center") },
+                { value: "right", text: i18n("Right") }
+            ]
         }
 
         Row {
-            Kirigami.FormData.label: "Highlight color:"
+            Kirigami.FormData.label: i18n("Highlight color:")
 
             KQuickControls.ColorButton {
                 id: highlightColorBtn
@@ -146,7 +159,7 @@ KCM.SimpleKCM {
             }
 
             QQC2.Button {
-                text: "Default"
+                text: i18n("Default")
                 onClicked: {
                     cfg_highlightColor = ""
                     highlightColorBtn.color = Kirigami.Theme.highlightColor

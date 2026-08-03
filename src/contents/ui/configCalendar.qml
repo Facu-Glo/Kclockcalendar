@@ -37,7 +37,7 @@ KCM.ScrollViewKCM {
 
         PlasmaComponents.CheckBox {
             id: showHolidaysCheck
-            text: "Show holidays in the calendar"
+            text: i18n("Show holidays in the calendar")
         }
 
         Kirigami.SearchField {
