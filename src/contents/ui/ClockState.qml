@@ -12,15 +12,15 @@ Item {
     }
 
     property date now: new Date()
-    property date day: new Date()
+    property date today: new Date()
 
     function updateNow() {
         var n = new Date()
         root.now = n
-        if (n.getFullYear() !== root.day.getFullYear()
-                || n.getMonth() !== root.day.getMonth()
-                || n.getDate() !== root.day.getDate()) {
-            root.day = n
+        if (n.getFullYear() !== root.today.getFullYear()
+                || n.getMonth() !== root.today.getMonth()
+                || n.getDate() !== root.today.getDate()) {
+            root.today = n
         }
     }
 

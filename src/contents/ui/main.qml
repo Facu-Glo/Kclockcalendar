@@ -9,7 +9,7 @@ PlasmoidItem {
     id: root
 
     toolTipMainText: Qt.locale().toString(root.now, root.config.timeFormat)
-    toolTipSubText: Qt.locale().toString(root.day, "dddd d MMMM yyyy")
+    toolTipSubText: Qt.locale().toString(root.today, "dddd d MMMM yyyy")
 
     preferredRepresentation: compactRepresentation
 
@@ -21,14 +21,13 @@ PlasmoidItem {
     }
 
     property date now: clock.now
-    property date day: clock.day
-    property date currentDate: clock.day
-    property date today: clock.day
+    property date today: clock.today
+    property date selectedDate: clock.today
     property int currentView: 0
 
     compactRepresentation: PanelClock {
         now: root.now
-        day: root.day
+        today: root.today
         config: root.config
         onToggleRequested: root.expanded = !root.expanded
     }
@@ -41,7 +40,7 @@ PlasmoidItem {
 
         function goToToday() {
             calendarBackend.resetToToday()
-            root.currentDate = root.today
+            root.selectedDate = root.today
             root.currentView = 0
             monthView.resetViewPosition()
         }
@@ -81,7 +80,7 @@ PlasmoidItem {
             PopupHeader {
                 Layout.fillWidth: true
                 now: root.now
-                day: root.day
+                today: root.today
                 monthTitle: calendarBackend.monthName + " " + calendarBackend.year
                 config: root.config
                 onMonthTitleClicked: root.currentView = root.currentView === 0 ? 1 : 0
@@ -110,16 +109,14 @@ PlasmoidItem {
                         rows: calendarBackend.weeks
                         width: monthView.width
                         height: monthView.height
-                        dayOfWeekHeaderModel: calendarBackend.days
                         todayDate: root.today
-                        selectedDate: root.currentDate
+                        selectedDate: root.selectedDate
                         highlightColor: root.config.highlightColor
 
                         backend: index === 0 ? monthView.previousCalendar : (index === 2 ? monthView.nextCalendar : calendarBackend)
-                        gridModel: index === 0 ? monthView.previousModel : (index === 2 ? monthView.nextModel : calendarBackend.daysModel)
 
                         onDateSelected: (d) => {
-                            root.currentDate = d
+                            root.selectedDate = d
                         }
                     }
                 }

@@ -9,7 +9,7 @@ MouseArea {
     signal toggleRequested()
 
     property date now: new Date()
-    property date day: new Date()
+    property date today: new Date()
     required property QtObject config
 
     readonly property bool inVerticalPanel: Plasmoid.formFactor === PlasmaCore.Types.Vertical
@@ -22,64 +22,11 @@ MouseArea {
     Layout.maximumHeight: inVerticalPanel ? layoutLoader.implicitHeight : -1
     onClicked: root.toggleRequested()
 
-    function timeIs12h() {
-        const f = root.config.timeFormat
-        return f.includes("ap") || f.includes("AP")
-    }
-
-    function timeHasSeconds() {
-        return root.config.timeFormat.includes("s")
-    }
-
-    function hourText() {
-        const has12h = timeIs12h()
-        const leading = has12h ? root.config.timeFormat.includes("hh") : root.config.timeFormat.includes("HH")
-        const fmt = has12h ? (leading ? "hh" : "h") : (leading ? "HH" : "H")
-        return Qt.locale().toString(root.now, fmt)
-    }
-
-    function minuteText() {
-        return Qt.locale().toString(root.now, root.config.timeFormat.includes("mm") ? "mm" : "m")
-    }
-
-    function ampmText() {
-        if (!timeIs12h()) return ""
-        const ap = root.config.timeFormat.includes("ap") ? "ap" : "AP"
-        return Qt.locale().toString(root.now, ap)
-    }
-
-    function secondText() {
-        if (!timeHasSeconds()) return ""
-        return Qt.locale().toString(root.now, root.config.timeFormat.includes("ss") ? "ss" : "s")
-    }
-
-    function splitDateFormat() {
-        const f = root.config.dateFormat
-        if (f.includes("MMMM")) {
-            const idx = f.indexOf("MMMM")
-            return { before: f.slice(0, idx), after: f.slice(idx + 4), month: "MMMM" }
-        }
-        if (f.includes("MMM")) {
-            const idx = f.indexOf("MMM")
-            return { before: f.slice(0, idx), after: f.slice(idx + 3), month: "MMM" }
-        }
-        return { before: f, after: "", month: "" }
-    }
-
-    function dateMainText() {
-        const seg = splitDateFormat()
-        if (!seg.month) return Qt.locale().toString(root.day, root.config.dateFormat)
-        if (seg.before.trim() === "") return Qt.locale().toString(root.day, seg.after).trim()
-        return Qt.locale().toString(root.day, seg.before).trim()
-    }
-
-    function dateMonthText() {
-        const seg = splitDateFormat()
-        if (!seg.month) return ""
-        const month = Qt.locale().toString(root.day, seg.month).trim()
-        if (seg.before.trim() === "") return month
-        const tail = Qt.locale().toString(root.day, seg.after).trim()
-        return [month, tail].filter(s => s !== "").join(" ")
+    property QtObject textResolver: ClockTextResolver {
+        now: root.now
+        day: root.today
+        timeFormat: root.config.timeFormat
+        dateFormat: root.config.dateFormat
     }
 
     Loader {
@@ -94,38 +41,22 @@ MouseArea {
         id: columnLayoutComponent
 
         ColumnLayout {
-            spacing: 0
+            spacing: root.config.dateTimeSpacing
 
-            ClockPanelLabel {
-                Layout.fillWidth: true
-                fontSize: root.config.timeFontSize
-                config: root.config
-                textSource: Qt.locale().toString(root.now, root.config.timeFormat)
-                visible: !root.config.dateAbove || !root.config.showDate
-            }
+            Repeater {
+                model: 2
 
-            ClockPanelLabel {
-                Layout.fillWidth: true
-                fontSize: root.config.dateFontSize
-                config: root.config
-                textSource: Qt.locale().toString(root.day, root.config.dateFormat)
-                visible: root.config.dateAbove && root.config.showDate
-            }
+                ClockPanelLabel {
+                    required property int index
 
-            ClockPanelLabel {
-                Layout.fillWidth: true
-                fontSize: root.config.timeFontSize
-                config: root.config
-                textSource: Qt.locale().toString(root.now, root.config.timeFormat)
-                visible: root.config.dateAbove && root.config.showDate
-            }
+                    readonly property bool isDate: root.config.dateAbove ? index === 0 : index === 1
 
-            ClockPanelLabel {
-                Layout.fillWidth: true
-                fontSize: root.config.dateFontSize
-                config: root.config
-                textSource: Qt.locale().toString(root.day, root.config.dateFormat)
-                visible: !root.config.dateAbove && root.config.showDate
+                    fillWidth: true
+                    fontSize: isDate ? root.config.dateFontSize : root.config.timeFontSize
+                    config: root.config
+                    textSource: isDate ? root.textResolver.fullDateText() : root.textResolver.fullTimeText()
+                    visible: !isDate || root.config.showDate
+                }
             }
         }
     }
@@ -134,48 +65,59 @@ MouseArea {
         id: stackedTimeComponent
 
         ColumnLayout {
-            spacing: 0
+            spacing: root.config.dateTimeSpacing
 
             Loader {
                 Layout.fillWidth: true
                 active: root.config.showDate && root.config.dateAbove
                 sourceComponent: root.config.dateMonthBelow ? stackedDateComponent : mainDateComponent
+                visible: active
+                Layout.preferredHeight: active ? implicitHeight : 0
+                Layout.preferredWidth: active ? implicitWidth : 0
             }
 
-            ClockPanelLabel {
+            ColumnLayout {
                 Layout.fillWidth: true
-                fontSize: root.config.timeFontSize
-                config: root.config
-                textSource: root.hourText()
-            }
+                spacing: 0
 
-            ClockPanelLabel {
-                Layout.fillWidth: true
-                fontSize: root.config.timeFontSize
-                config: root.config
-                textSource: root.minuteText()
-            }
+                ClockPanelLabel {
+                    Layout.fillWidth: true
+                    fontSize: root.config.timeFontSize
+                    config: root.config
+                    textSource: root.textResolver.hourText()
+                }
 
-            ClockPanelLabel {
-                Layout.fillWidth: true
-                fontSize: root.config.timeFontSize
-                config: root.config
-                textSource: root.secondText()
-                visible: root.timeHasSeconds()
-            }
+                ClockPanelLabel {
+                    Layout.fillWidth: true
+                    fontSize: root.config.timeFontSize
+                    config: root.config
+                    textSource: root.textResolver.minuteText()
+                }
 
-            ClockPanelLabel {
-                Layout.fillWidth: true
-                fontSize: root.config.ampmFontSize
-                config: root.config
-                textSource: root.ampmText()
-                visible: root.ampmText() !== ""
+                ClockPanelLabel {
+                    Layout.fillWidth: true
+                    fontSize: root.config.timeFontSize
+                    config: root.config
+                    textSource: root.textResolver.secondText()
+                    visible: root.textResolver.timeHasSeconds()
+                }
+
+                ClockPanelLabel {
+                    Layout.fillWidth: true
+                    fontSize: root.config.ampmFontSize
+                    config: root.config
+                    textSource: root.textResolver.ampmText()
+                    visible: root.textResolver.ampmText() !== ""
+                }
             }
 
             Loader {
                 Layout.fillWidth: true
                 active: root.config.showDate && !root.config.dateAbove
                 sourceComponent: root.config.dateMonthBelow ? stackedDateComponent : mainDateComponent
+                visible: active
+                Layout.preferredHeight: active ? implicitHeight : 0
+                Layout.preferredWidth: active ? implicitWidth : 0
             }
         }
     }
@@ -186,7 +128,7 @@ MouseArea {
         ClockPanelLabel {
             fontSize: root.config.dateFontSize
             config: root.config
-            textSource: Qt.locale().toString(root.day, root.config.dateFormat)
+            textSource: root.textResolver.fullDateText()
         }
     }
 
@@ -200,15 +142,15 @@ MouseArea {
                 Layout.fillWidth: true
                 fontSize: root.config.dateFontSize
                 config: root.config
-                textSource: root.dateMainText()
+                textSource: root.textResolver.dateMainText()
             }
 
             ClockPanelLabel {
                 Layout.fillWidth: true
                 fontSize: root.config.dateFontSize
                 config: root.config
-                textSource: root.dateMonthText()
-                visible: root.dateMonthText() !== ""
+                textSource: root.textResolver.dateMonthText()
+                visible: root.textResolver.dateMonthText() !== ""
             }
         }
     }
@@ -217,7 +159,7 @@ MouseArea {
         id: rowLayoutComponent
 
         RowLayout {
-            spacing: 4
+            spacing: root.config.dateTimeSpacing
 
             Repeater {
                 model: 2
@@ -229,9 +171,7 @@ MouseArea {
 
                     fontSize: isDate ? root.config.dateFontSize : root.config.timeFontSize
                     config: root.config
-                    textSource: isDate
-                                ? Qt.locale().toString(root.day, root.config.dateFormat)
-                                : Qt.locale().toString(root.now, root.config.timeFormat)
+                    textSource: isDate ? root.textResolver.fullDateText() : root.textResolver.fullTimeText()
                     visible: !isDate || root.config.showDate
                 }
             }

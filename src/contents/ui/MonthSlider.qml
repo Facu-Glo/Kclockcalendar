@@ -10,8 +10,6 @@ ListView {
 
     readonly property alias previousCalendar: previousBackend
     readonly property alias nextCalendar: nextBackend
-    readonly property alias previousModel: previousBackend.daysModel
-    readonly property alias nextModel: nextBackend.daysModel
 
     model: 3
     snapMode: ListView.SnapToItem

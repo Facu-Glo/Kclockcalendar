@@ -12,7 +12,7 @@ ColumnLayout {
     signal todayClicked()
 
     property date now: new Date()
-    property date day: new Date()
+    property date today: new Date()
     property string monthTitle: ""
     required property QtObject config
 
@@ -41,7 +41,7 @@ ColumnLayout {
             font.pixelSize: 16
             font.weight: 300
             color: root.config.textColor
-            text: Qt.locale().toString(root.day, root.config.popupDateFormat)
+            text: Qt.locale().toString(root.today, root.config.popupDateFormat)
         }
     }
 

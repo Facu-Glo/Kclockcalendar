@@ -15,9 +15,6 @@ Item {
     property date selectedDate: new Date()
     property color highlightColor: Kirigami.Theme.highlightColor
 
-    property alias dayOfWeekHeaderModel: dayOfWeekHeaderRepeater.model
-    property alias gridModel: gridRepeater.model
-
     readonly property int cellWidth: Math.floor(width / columns)
     readonly property int cellHeight: Math.floor(height / (rows + 1))
 
@@ -30,6 +27,7 @@ Item {
 
         Repeater {
             id: dayOfWeekHeaderRepeater
+            model: daysCalendar.columns
 
             Kirigami.Heading {
                 required property int index
@@ -49,6 +47,7 @@ Item {
 
         Repeater {
             id: gridRepeater
+            model: daysCalendar.backend ? daysCalendar.backend.daysModel : null
 
             DayDelegate {
                 width: daysCalendar.cellWidth
